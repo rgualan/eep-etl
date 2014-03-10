@@ -1,4 +1,11 @@
 eep_etl
 =======
 
-EEP ETL
+Project under construction
+
+Developers:
+RG
+FV
+
+Support:
+DM
