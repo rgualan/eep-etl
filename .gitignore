@@ -1,6 +1,23 @@
-*.class
+#################
+## Eclipse
+#################
 
-# Package Files #
-*.jar
-*.war
-*.ear
+.project
+.classpath
+.settings/
+target/
+deploy/
+tmp/
+log/
+
+*.log
+
+############
+## Windows
+############
+
+# Windows image file caches
+Thumbs.db
+
+# Folder config file
+Desktop.ini
