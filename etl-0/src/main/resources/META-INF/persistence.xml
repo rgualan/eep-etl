@@ -5,11 +5,20 @@
 	<persistence-unit name="etl" transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<class>com.etapa.etl.persistence.entity.Center</class>
+		<class>com.etapa.etl.persistence.entity.Estacion</class>
+		<class>com.etapa.etl.persistence.entity.EstacionPK</class>
+		<class>com.etapa.etl.persistence.entity.Fenomeno</class>
+		<class>com.etapa.etl.persistence.entity.FenomenoUnidade</class>
+		<class>com.etapa.etl.persistence.entity.FenomenoUnidadePK</class>
+		<class>com.etapa.etl.persistence.entity.Observacion</class>
+		<class>com.etapa.etl.persistence.entity.ObservacionPK</class>
+		<class>com.etapa.etl.persistence.entity.TipoEstacion</class>
+		<class>com.etapa.etl.persistence.entity.Unidade</class>
 		<shared-cache-mode>NONE</shared-cache-mode>
 		<properties>
 			<!--Local connection -->
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/etl" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/etapa" />
 			<property name="javax.persistence.jdbc.user" value="root" />
 			<!--MySQL -->
 			<property name="eclipselink.target-database"
