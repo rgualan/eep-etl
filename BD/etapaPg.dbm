@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.7.0">
+<database name="etapa" encoding="UTF8" lc-collate="Spanish_Spain" lc-ctype="Spanish_Spain">
+	<role name="postgres"/>
+	<tablespace name="pg_default"/>
+</database>
+
+<schema name="public" protected="true" rect-visible="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<table name="archivo">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="59" y="36"/>
+	<column name="arc_path" not-null="true">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="arc_nbytes" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<constraint name="archivo_pkey" type="pk-constr" factor="100" table="public.archivo">
+		<columns names="arc_path" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="estacion">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="580" y="65"/>
+	<column name="est_id" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="tip_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="est_latitud">
+		<type name="double precision"/>
+	</column>
+	<column name="est_longitud">
+		<type name="double precision"/>
+	</column>
+	<column name="est_provincia" default-value="NULL::character varying">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="est_ciudad" default-value="NULL::character varying">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="est_parroquia" default-value="NULL::character varying">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="est_descripcion" default-value="NULL::character varying">
+		<type name="character varying" length="250"/>
+	</column>
+	<column name="est_toa" default-value="NULL::character varying">
+		<type name="character varying" length="10"/>
+	</column>
+	<column name="est_modelodatalog" default-value="NULL::character varying">
+		<type name="character varying" length="15"/>
+	</column>
+	<column name="est_codigodatalog" default-value="NULL::character varying">
+		<type name="character varying" length="15"/>
+	</column>
+	<column name="est_std" default-value="NULL::character varying">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="est_versionprog" default-value="NULL::character varying">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="est_num" default-value="NULL::character varying">
+		<type name="character varying" length="15"/>
+	</column>
+	<constraint name="estacion_pkey" type="pk-constr" factor="100" table="public.estacion">
+		<columns names="est_id,tip_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="fenomeno">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1102" y="193"/>
+	<column name="fen_id" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="fen_nombre" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="fen_descripcion" default-value="NULL::character varying">
+		<type name="character varying" length="250"/>
+	</column>
+	<column name="fenomeno_fen_id" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<constraint name="fenomeno_pkey" type="pk-constr" factor="100" table="public.fenomeno">
+		<columns names="fen_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="fenomeno_unidades">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1105" y="396"/>
+	<column name="fen_id" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="uni_id" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="feu_maximo" not-null="true">
+		<type name="double precision"/>
+	</column>
+	<column name="feu_minimo" not-null="true">
+		<type name="double precision"/>
+	</column>
+	<column name="feu_alturasensor">
+		<type name="double precision"/>
+	</column>
+	<constraint name="fenomeno_unidades_pkey" type="pk-constr" factor="100" table="public.fenomeno_unidades">
+		<columns names="fen_id,uni_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="incremento"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="observacion">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="572" y="366"/>
+	<column name="obs_fecha" not-null="true">
+		<type name="date"/>
+	</column>
+	<column name="est_id" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="tip_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="uni_id" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="fen_id" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="obs_valor" not-null="true">
+		<type name="character varying" length="100"/>
+	</column>
+	<constraint name="observacion_pkey" type="pk-constr" factor="100" table="public.observacion">
+		<columns names="obs_fecha,est_id,tip_id,uni_id,fen_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="tipo_estacion_tip_id_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="tipo_estacion">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="62" y="142.4"/>
+	<column name="tip_id" not-null="true" default-value="nextval('tipo_estacion_tip_id_seq'::regclass)">
+		<type name="integer"/>
+	</column>
+	<column name="tip_nombre" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="tip_descripcion" default-value="NULL::character varying">
+		<type name="character varying" length="250"/>
+	</column>
+	<constraint name="tipo_estacion_pkey" type="pk-constr" factor="100" table="public.tipo_estacion">
+		<columns names="tip_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="unidades">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1114" y="615.4"/>
+	<column name="uni_id" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="uni_nombre" not-null="true">
+		<type name="character varying" length="250"/>
+	</column>
+	<column name="uni_descripcion" not-null="true">
+		<type name="character varying" length="250"/>
+	</column>
+	<column name="uni_tipo" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<constraint name="unidades_pkey" type="pk-constr" factor="100" table="public.unidades">
+		<columns names="uni_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<constraint name="tip_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.tipo_estacion" table="public.estacion">
+	<columns names="tip_id" ref-type="src-columns"/>
+	<columns names="tip_id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="fen_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="RESTRICT" del-action="RESTRICT" ref-table="public.fenomeno" table="public.fenomeno_unidades">
+	<columns names="fen_id" ref-type="src-columns"/>
+	<columns names="fen_id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="uni_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="RESTRICT" del-action="RESTRICT" ref-table="public.unidades" table="public.fenomeno_unidades">
+	<columns names="uni_id" ref-type="src-columns"/>
+	<columns names="uni_id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="estacion_pkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="RESTRICT" del-action="RESTRICT" ref-table="public.estacion" table="public.observacion">
+	<columns names="est_id,tip_id" ref-type="src-columns"/>
+	<columns names="est_id,tip_id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="fenomeno_unidades_pkey" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="RESTRICT" del-action="RESTRICT" ref-table="public.fenomeno_unidades" table="public.observacion">
+	<columns names="uni_id,fen_id" ref-type="src-columns"/>
+	<columns names="uni_id,fen_id" ref-type="dst-columns"/>
+</constraint>
+<relationship name="rel_estacion_tipo_estacion" type="relfk"
+	 src-table="public.estacion"
+	 dst-table="public.tipo_estacion"
+	 src-required="true" dst-required="true"/>
+
+<relationship name="rel_fenomeno_unidades_fenomeno" type="relfk"
+	 src-table="public.fenomeno_unidades"
+	 dst-table="public.fenomeno"
+	 src-required="true" dst-required="true"/>
+
+<relationship name="rel_fenomeno_unidades_unidades" type="relfk"
+	 src-table="public.fenomeno_unidades"
+	 dst-table="public.unidades"
+	 src-required="true" dst-required="true"/>
+
+<relationship name="rel_observacion_estacion" type="relfk"
+	 src-table="public.observacion"
+	 dst-table="public.estacion"
+	 src-required="true" dst-required="true"/>
+
+<relationship name="rel_observacion_fenomeno_unidades" type="relfk"
+	 src-table="public.observacion"
+	 dst-table="public.fenomeno_unidades"
+	 src-required="true" dst-required="true"/>
+
+</dbmodel>
