@@ -15,8 +15,8 @@ public class EstacionPK implements Serializable {
 	@Column(name="est_id")
 	private String estId;
 
-	@Column(name="tip_id")
-	private int tipId;
+	@Column(name="tip_id", insertable=false, updatable=false)
+	private Integer tipId;
 
 	public EstacionPK() {
 	}
@@ -26,10 +26,10 @@ public class EstacionPK implements Serializable {
 	public void setEstId(String estId) {
 		this.estId = estId;
 	}
-	public int getTipId() {
+	public Integer getTipId() {
 		return this.tipId;
 	}
-	public void setTipId(int tipId) {
+	public void setTipId(Integer tipId) {
 		this.tipId = tipId;
 	}
 
@@ -43,14 +43,14 @@ public class EstacionPK implements Serializable {
 		EstacionPK castOther = (EstacionPK)other;
 		return 
 			this.estId.equals(castOther.estId)
-			&& (this.tipId == castOther.tipId);
+			&& this.tipId.equals(castOther.tipId);
 	}
 
 	public int hashCode() {
 		final int prime = 31;
 		int hash = 17;
 		hash = hash * prime + this.estId.hashCode();
-		hash = hash * prime + this.tipId;
+		hash = hash * prime + this.tipId.hashCode();
 		
 		return hash;
 	}

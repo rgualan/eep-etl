@@ -15,8 +15,9 @@ public class TipoEstacion implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="tip_id")
-	private int tipId;
+	private Integer tipId;
 
 	@Column(name="tip_descripcion")
 	private String tipDescripcion;
@@ -27,11 +28,11 @@ public class TipoEstacion implements Serializable {
 	public TipoEstacion() {
 	}
 
-	public int getTipId() {
+	public Integer getTipId() {
 		return this.tipId;
 	}
 
-	public void setTipId(int tipId) {
+	public void setTipId(Integer tipId) {
 		this.tipId = tipId;
 	}
 

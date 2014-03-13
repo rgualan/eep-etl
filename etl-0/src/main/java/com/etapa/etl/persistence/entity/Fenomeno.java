@@ -14,6 +14,7 @@ public class Fenomeno implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="fen_id")
 	private String fenId;
 
@@ -22,6 +23,9 @@ public class Fenomeno implements Serializable {
 
 	@Column(name="fen_nombre")
 	private String fenNombre;
+
+	@Column(name="fenomeno_fen_id")
+	private String fenomenoFenId;
 
 	public Fenomeno() {
 	}
@@ -48,6 +52,14 @@ public class Fenomeno implements Serializable {
 
 	public void setFenNombre(String fenNombre) {
 		this.fenNombre = fenNombre;
+	}
+
+	public String getFenomenoFenId() {
+		return this.fenomenoFenId;
+	}
+
+	public void setFenomenoFenId(String fenomenoFenId) {
+		this.fenomenoFenId = fenomenoFenId;
 	}
 
 }

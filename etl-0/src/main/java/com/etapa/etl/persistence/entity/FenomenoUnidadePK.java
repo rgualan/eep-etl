@@ -12,10 +12,10 @@ public class FenomenoUnidadePK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
-	@Column(name="fen_id")
+	@Column(name="fen_id", insertable=false, updatable=false)
 	private String fenId;
 
-	@Column(name="uni_id")
+	@Column(name="uni_id", insertable=false, updatable=false)
 	private String uniId;
 
 	public FenomenoUnidadePK() {

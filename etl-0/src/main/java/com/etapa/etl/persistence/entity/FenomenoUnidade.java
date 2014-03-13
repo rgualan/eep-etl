@@ -18,13 +18,23 @@ public class FenomenoUnidade implements Serializable {
 	private FenomenoUnidadePK id;
 
 	@Column(name="feu_alturasensor")
-	private float feuAlturasensor;
+	private double feuAlturasensor;
 
 	@Column(name="feu_maximo")
-	private float feuMaximo;
+	private double feuMaximo;
 
 	@Column(name="feu_minimo")
-	private float feuMinimo;
+	private double feuMinimo;
+
+	//uni-directional many-to-one association to Fenomeno
+	@ManyToOne
+	@JoinColumn(name="fen_id")
+	private Fenomeno fenomeno;
+
+	//uni-directional many-to-one association to Unidade
+	@ManyToOne
+	@JoinColumn(name="uni_id")
+	private Unidade unidade;
 
 	public FenomenoUnidade() {
 	}
@@ -37,28 +47,44 @@ public class FenomenoUnidade implements Serializable {
 		this.id = id;
 	}
 
-	public float getFeuAlturasensor() {
+	public double getFeuAlturasensor() {
 		return this.feuAlturasensor;
 	}
 
-	public void setFeuAlturasensor(float feuAlturasensor) {
+	public void setFeuAlturasensor(double feuAlturasensor) {
 		this.feuAlturasensor = feuAlturasensor;
 	}
 
-	public float getFeuMaximo() {
+	public double getFeuMaximo() {
 		return this.feuMaximo;
 	}
 
-	public void setFeuMaximo(float feuMaximo) {
+	public void setFeuMaximo(double feuMaximo) {
 		this.feuMaximo = feuMaximo;
 	}
 
-	public float getFeuMinimo() {
+	public double getFeuMinimo() {
 		return this.feuMinimo;
 	}
 
-	public void setFeuMinimo(float feuMinimo) {
+	public void setFeuMinimo(double feuMinimo) {
 		this.feuMinimo = feuMinimo;
+	}
+
+	public Fenomeno getFenomeno() {
+		return this.fenomeno;
+	}
+
+	public void setFenomeno(Fenomeno fenomeno) {
+		this.fenomeno = fenomeno;
+	}
+
+	public Unidade getUnidade() {
+		return this.unidade;
+	}
+
+	public void setUnidade(Unidade unidade) {
+		this.unidade = unidade;
 	}
 
 }

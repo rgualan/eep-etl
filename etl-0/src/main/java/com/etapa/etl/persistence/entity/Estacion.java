@@ -19,20 +19,43 @@ public class Estacion implements Serializable {
 	@Column(name="est_ciudad")
 	private String estCiudad;
 
+	@Column(name="est_codigodatalog")
+	private String estCodigodatalog;
+
 	@Column(name="est_descripcion")
 	private String estDescripcion;
 
 	@Column(name="est_latitud")
-	private float estLatitud;
+	private double estLatitud;
 
 	@Column(name="est_longitud")
-	private float estLongitud;
+	private double estLongitud;
+
+	@Column(name="est_modelodatalog")
+	private String estModelodatalog;
+
+	@Column(name="est_num")
+	private String estNum;
 
 	@Column(name="est_parroquia")
 	private String estParroquia;
 
 	@Column(name="est_provincia")
 	private String estProvincia;
+
+	@Column(name="est_std")
+	private String estStd;
+
+	@Column(name="est_toa")
+	private String estToa;
+
+	@Column(name="est_versionprog")
+	private String estVersionprog;
+
+	//uni-directional many-to-one association to TipoEstacion
+	@ManyToOne
+	@JoinColumn(name="tip_id")
+	private TipoEstacion tipoEstacion;
 
 	public Estacion() {
 	}
@@ -53,6 +76,14 @@ public class Estacion implements Serializable {
 		this.estCiudad = estCiudad;
 	}
 
+	public String getEstCodigodatalog() {
+		return this.estCodigodatalog;
+	}
+
+	public void setEstCodigodatalog(String estCodigodatalog) {
+		this.estCodigodatalog = estCodigodatalog;
+	}
+
 	public String getEstDescripcion() {
 		return this.estDescripcion;
 	}
@@ -61,20 +92,36 @@ public class Estacion implements Serializable {
 		this.estDescripcion = estDescripcion;
 	}
 
-	public float getEstLatitud() {
+	public double getEstLatitud() {
 		return this.estLatitud;
 	}
 
-	public void setEstLatitud(float estLatitud) {
+	public void setEstLatitud(double estLatitud) {
 		this.estLatitud = estLatitud;
 	}
 
-	public float getEstLongitud() {
+	public double getEstLongitud() {
 		return this.estLongitud;
 	}
 
-	public void setEstLongitud(float estLongitud) {
+	public void setEstLongitud(double estLongitud) {
 		this.estLongitud = estLongitud;
+	}
+
+	public String getEstModelodatalog() {
+		return this.estModelodatalog;
+	}
+
+	public void setEstModelodatalog(String estModelodatalog) {
+		this.estModelodatalog = estModelodatalog;
+	}
+
+	public String getEstNum() {
+		return this.estNum;
+	}
+
+	public void setEstNum(String estNum) {
+		this.estNum = estNum;
 	}
 
 	public String getEstParroquia() {
@@ -91,6 +138,38 @@ public class Estacion implements Serializable {
 
 	public void setEstProvincia(String estProvincia) {
 		this.estProvincia = estProvincia;
+	}
+
+	public String getEstStd() {
+		return this.estStd;
+	}
+
+	public void setEstStd(String estStd) {
+		this.estStd = estStd;
+	}
+
+	public String getEstToa() {
+		return this.estToa;
+	}
+
+	public void setEstToa(String estToa) {
+		this.estToa = estToa;
+	}
+
+	public String getEstVersionprog() {
+		return this.estVersionprog;
+	}
+
+	public void setEstVersionprog(String estVersionprog) {
+		this.estVersionprog = estVersionprog;
+	}
+
+	public TipoEstacion getTipoEstacion() {
+		return this.tipoEstacion;
+	}
+
+	public void setTipoEstacion(TipoEstacion tipoEstacion) {
+		this.tipoEstacion = tipoEstacion;
 	}
 
 }

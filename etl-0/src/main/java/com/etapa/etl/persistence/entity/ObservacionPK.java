@@ -16,16 +16,16 @@ public class ObservacionPK implements Serializable {
 	@Column(name="obs_fecha")
 	private java.util.Date obsFecha;
 
-	@Column(name="est_id")
+	@Column(name="est_id", insertable=false, updatable=false)
 	private String estId;
 
-	@Column(name="tip_id")
-	private int tipId;
+	@Column(name="tip_id", insertable=false, updatable=false)
+	private Integer tipId;
 
-	@Column(name="uni_id")
+	@Column(name="uni_id", insertable=false, updatable=false)
 	private String uniId;
 
-	@Column(name="fen_id")
+	@Column(name="fen_id", insertable=false, updatable=false)
 	private String fenId;
 
 	public ObservacionPK() {
@@ -42,10 +42,10 @@ public class ObservacionPK implements Serializable {
 	public void setEstId(String estId) {
 		this.estId = estId;
 	}
-	public int getTipId() {
+	public Integer getTipId() {
 		return this.tipId;
 	}
-	public void setTipId(int tipId) {
+	public void setTipId(Integer tipId) {
 		this.tipId = tipId;
 	}
 	public String getUniId() {
@@ -72,7 +72,7 @@ public class ObservacionPK implements Serializable {
 		return 
 			this.obsFecha.equals(castOther.obsFecha)
 			&& this.estId.equals(castOther.estId)
-			&& (this.tipId == castOther.tipId)
+			&& this.tipId.equals(castOther.tipId)
 			&& this.uniId.equals(castOther.uniId)
 			&& this.fenId.equals(castOther.fenId);
 	}
@@ -82,7 +82,7 @@ public class ObservacionPK implements Serializable {
 		int hash = 17;
 		hash = hash * prime + this.obsFecha.hashCode();
 		hash = hash * prime + this.estId.hashCode();
-		hash = hash * prime + this.tipId;
+		hash = hash * prime + this.tipId.hashCode();
 		hash = hash * prime + this.uniId.hashCode();
 		hash = hash * prime + this.fenId.hashCode();
 		

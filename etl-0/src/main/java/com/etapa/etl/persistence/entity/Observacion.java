@@ -19,6 +19,22 @@ public class Observacion implements Serializable {
 	@Column(name="obs_valor")
 	private String obsValor;
 
+	//uni-directional many-to-one association to Estacion
+	@ManyToOne
+	@JoinColumns({
+		@JoinColumn(name="est_id", referencedColumnName="est_id"),
+		@JoinColumn(name="tip_id", referencedColumnName="tip_id")
+		})
+	private Estacion estacion;
+
+	//uni-directional many-to-one association to FenomenoUnidade
+	@ManyToOne
+	@JoinColumns({
+		@JoinColumn(name="fen_id", referencedColumnName="uni_id"),
+		@JoinColumn(name="uni_id", referencedColumnName="fen_id")
+		})
+	private FenomenoUnidade fenomenoUnidade;
+
 	public Observacion() {
 	}
 
@@ -36,6 +52,22 @@ public class Observacion implements Serializable {
 
 	public void setObsValor(String obsValor) {
 		this.obsValor = obsValor;
+	}
+
+	public Estacion getEstacion() {
+		return this.estacion;
+	}
+
+	public void setEstacion(Estacion estacion) {
+		this.estacion = estacion;
+	}
+
+	public FenomenoUnidade getFenomenoUnidade() {
+		return this.fenomenoUnidade;
+	}
+
+	public void setFenomenoUnidade(FenomenoUnidade fenomenoUnidade) {
+		this.fenomenoUnidade = fenomenoUnidade;
 	}
 
 }
