@@ -39,5 +39,10 @@ public class Archivo implements Serializable {
 	public void setArcNbytes(Long arcNbytes) {
 		this.arcNbytes = arcNbytes;
 	}
+	
+	@Override
+    public String toString() {
+        return "com.etapa.etl.persistence.entity.Archivo[ arcPath=" + arcPath + " ]";
+    }
 
 }
