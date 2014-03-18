@@ -24,8 +24,8 @@ public class Fenomeno implements Serializable {
 	@Column(name="fen_nombre")
 	private String fenNombre;
 
-	@Column(name="fenomeno_fen_id")
-	private String fenomenoFenId;
+	@Column(name="fen_tipo")
+	private String fenTipo;
 
 	public Fenomeno() {
 	}
@@ -54,12 +54,12 @@ public class Fenomeno implements Serializable {
 		this.fenNombre = fenNombre;
 	}
 
-	public String getFenomenoFenId() {
-		return this.fenomenoFenId;
+	public String getFenTipo() {
+		return this.fenTipo;
 	}
 
-	public void setFenomenoFenId(String fenomenoFenId) {
-		this.fenomenoFenId = fenomenoFenId;
+	public void setFenTipo(String fenTipo) {
+		this.fenTipo = fenTipo;
 	}
 
 }

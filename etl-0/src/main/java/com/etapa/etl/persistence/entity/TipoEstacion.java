@@ -15,8 +15,8 @@ public class TipoEstacion implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="tip_id")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="tip_id", nullable=false)
 	private Integer tipId;
 
 	@Column(name="tip_descripcion")

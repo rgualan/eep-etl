@@ -9,7 +9,9 @@ import javax.persistence.*;
  * 
  */
 @Entity
-@NamedQuery(name="Estacion.findAll", query="SELECT e FROM Estacion e")
+@NamedQueries(	
+	@NamedQuery(name = "Estacion.findAll", query = "SELECT e FROM Estacion e")
+	)
 public class Estacion implements Serializable {
 	private static final long serialVersionUID = 1L;
 

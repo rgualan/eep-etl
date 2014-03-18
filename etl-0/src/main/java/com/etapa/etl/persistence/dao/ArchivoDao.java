@@ -15,9 +15,12 @@ public class ArchivoDao extends GeneralDao {
 		TypedQuery<Archivo> query = em.createQuery("Select a from Archivo a where a.arcPath = :arcPath",
 				Archivo.class);
 		query.setParameter("arcPath", archivoId);
-		
-		Archivo archivo = query.getSingleResult();
-
+		Archivo archivo = null;
+		try{
+		 archivo = query.getSingleResult();
+		}
+		catch(Exception e)
+		{}
 		return archivo;
 	}
 }
