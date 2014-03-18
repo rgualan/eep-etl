@@ -7,8 +7,8 @@ import java.util.List;
 
 import com.etapa.etl.persistence.entity.Archivo;
 import com.etapa.etl.persistence.entity.TipoEstacion;
-import com.etapa.etl.util.persistencia;
-import com.etapa.etl.util.recopilar_datos;
+import com.etapa.etl.util.Persistencia;
+import com.etapa.etl.util.RecopilarDatos;
 
 
 
@@ -19,7 +19,7 @@ public class App {
 	
 
 		System.out.println("Hola mundo!!!");
-		recopilar_datos rd = new recopilar_datos();
+		RecopilarDatos rd = new RecopilarDatos();
 		rd.leerdatos();
 		//recopilar_datos rd = new recopilar_datos();
 	//	rd.leerdatos();
