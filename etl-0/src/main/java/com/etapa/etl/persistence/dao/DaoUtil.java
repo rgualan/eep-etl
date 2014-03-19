@@ -1,5 +1,8 @@
 package com.etapa.etl.persistence.dao;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.etapa.etl.persistence.entity.Archivo;
 import com.etapa.etl.persistence.entity.Estacion;
 import com.etapa.etl.persistence.entity.EstacionPK;
@@ -285,16 +288,26 @@ public class DaoUtil {
 
 	public void ingresaFenomenoUnidade(String campos[]) throws Exception {
 		// List<Fenomeno> fen = this.consultaFenomeno(campos[0]);
-		Fenomeno fen = JpaManager.find(Fenomeno.class, campos[0]);
+		
 
 		// List<Unidade> uni = this.consultaUnidade(campos[1]);
-		Unidade uni = JpaManager.find(Unidade.class, campos[1]);
+		Unidade uni = JpaManager.find(Unidade.class, campos[0]);
+		Fenomeno fen = JpaManager.find(Fenomeno.class, campos[1]);
+		System.out.println("LLENA FENOMENOOOOOOO"+ fen.getFenId() +" "+uni.getUniId());
+		
 
 		FenomenoUnidade newEntity = new FenomenoUnidade();
+		FenomenoUnidadePK id = new FenomenoUnidadePK();
+		id.setFenId(fen.getFenId());
+		id.setUniId(uni.getUniId());
 		newEntity.setFenomeno(fen);
 		newEntity.setUnidade(uni);
+		newEntity.setId(id);
+		if (!campos[2].equals(""))
 		newEntity.setFeuMaximo(Double.valueOf(campos[2]));
+		if (!campos[3].equals(""))
 		newEntity.setFeuMinimo(Double.valueOf(campos[3]));
+		if (!campos[4].equals(""))
 		newEntity.setFeuAlturasensor(Double.valueOf(campos[4]));
 
 		GeneralDao.insert(newEntity);
@@ -302,20 +315,30 @@ public class DaoUtil {
 	}
 
 	public void ingresaObservacion(String campos[]) throws Exception {
+				
 		FenomenoUnidadePK fenUniPk = new FenomenoUnidadePK();
-		fenUniPk.setFenId(campos[3]);
 		fenUniPk.setFenId(campos[4]);
+		fenUniPk.setUniId(campos[3]);		
 		FenomenoUnidade fenuni = JpaManager.find(FenomenoUnidade.class,
 				fenUniPk);
 
 		EstacionPK estPk = new EstacionPK();
 		estPk.setEstId(campos[1]);
-		estPk.setEstId(campos[2]);
+		estPk.setTipId(Integer.valueOf(campos[2]));
 		Estacion est = JpaManager.find(Estacion.class, estPk);
 
 		Observacion newEntity = new Observacion();
 		ObservacionPK id = new ObservacionPK();
-		id.setObsFecha(new java.util.Date(campos[0]));
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:MM:SS");
+        Date parsed = format.parse(campos[0]);
+        java.sql.Date sql = new java.sql.Date(parsed.getTime());
+        
+		id.setObsFecha(sql);
+		
+		id.setEstId(est.getId().getEstId());
+		id.setTipId(est.getId().getTipId());
+		id.setFenId(fenuni.getId().getFenId());
+		id.setUniId(fenuni.getId().getUniId());		
 		newEntity.setId(id);
 		newEntity.setEstacion(est);
 		newEntity.setFenomenoUnidade(fenuni);

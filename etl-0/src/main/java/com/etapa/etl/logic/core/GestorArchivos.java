@@ -92,7 +92,9 @@ public class GestorArchivos implements Runnable {
 					"ESTE ES EL TAM QUE DEBE LEER + " + lineas.size());
 			int i = 0;
 			while (i != lineas.size()) {
+				lineas.set(i,lineas.get(i).replaceAll("\"", ""));
 				campos = lineas.get(i).split(separador);
+				
 				if (i == 0) // sacar de la conf el n lineas de la cabecera??
 				{
 
