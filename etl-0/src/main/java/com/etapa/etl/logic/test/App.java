@@ -10,7 +10,7 @@ public class App {
 	public static void main(String[] args) throws Exception {
 
 		Log.getInstance().info("Hola mundo!!!");
-		
+
 		try {
 			// Persistence.createEntityManager();
 			JpaManagerFactory.createEntityManagerFactory();
@@ -32,11 +32,27 @@ public class App {
 
 	}
 
+	/**
+	 * 
+	 */
 	private static void cleanTables() {
 		Log.getInstance().info("Eliminando tablas para la prueba...");
 		JpaManager.beginTransaction();
+		JpaManager.getEntityManager()
+				.createNativeQuery("DELETE FROM OBSERVACION").executeUpdate();
+		JpaManager.getEntityManager()
+				.createNativeQuery("DELETE FROM FENOMENO_UNIDADES")
+				.executeUpdate();
+		JpaManager.getEntityManager().createNativeQuery("DELETE FROM FENOMENO")
+				.executeUpdate();
+		JpaManager.getEntityManager().createNativeQuery("DELETE FROM UNIDADES")
+				.executeUpdate();
 		JpaManager.getEntityManager().createNativeQuery("DELETE FROM ARCHIVO")
 				.executeUpdate();
+		JpaManager.getEntityManager()
+				.createNativeQuery("DELETE FROM ESTACION").executeUpdate();
+		JpaManager.getEntityManager()
+				.createNativeQuery("DELETE FROM TIPO_ESTACION").executeUpdate();
 		JpaManager.commitTransaction();
 	}
 

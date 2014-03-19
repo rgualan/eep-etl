@@ -206,8 +206,10 @@ public class DaoUtil {
 
 	public TipoEstacion buscaoIngresaTipoEstacion(String campos[]) throws Exception {
 		// Buscar
-		TipoEstacion entity = JpaManager.find(TipoEstacion.class, campos[0]);
-
+		TipoEstacion entity = TipoEstacionDao.queryByNombre(campos[0]); 
+		Log.getInstance().debug("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY>>>" + campos);
+		Log.getInstance().debug("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY>>>" + entity);
+		
 		if (entity == null) {
 			// Ingresar
 

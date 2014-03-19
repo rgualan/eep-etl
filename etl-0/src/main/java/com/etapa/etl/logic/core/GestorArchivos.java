@@ -85,7 +85,7 @@ public class GestorArchivos implements Runnable {
 			// /****/****/*// guardar esto en la bd
 			// guarda la long del archivo
 			String est_id = null;
-			String tip_id = null;
+			int tip_id = 0;
 			String[] fen_id = null;
 			String[] uni_id = null;
 			Log.getInstance().info(
@@ -100,10 +100,10 @@ public class GestorArchivos implements Runnable {
 					String[] aTipo = new String[2];
 					aTipo[0] = campos[7];
 					aTipo[1] = campos[7];
-					tip_id = campos[7];
+					
 
 					TipoEstacion tipoest = daoUtil.buscaoIngresaTipoEstacion(aTipo);
-
+					tip_id = tipoest.getTipId();
 					/*
 					 * est_id= campos[1]; String tipid =
 					 * String.valueOf(tipoest.get(0).getTipId());//lo q saque
@@ -117,7 +117,7 @@ public class GestorArchivos implements Runnable {
 					 */
 					String[] datoss = new String[8];
 					datoss[0] = campos[1];
-					datoss[1] = campos[7];
+					datoss[1] = String.valueOf(tip_id);
 					datoss[2] = campos[0];
 					datoss[3] = campos[2];
 					datoss[4] = campos[3];
@@ -126,15 +126,16 @@ public class GestorArchivos implements Runnable {
 					datoss[7] = campos[6];
 
 					daoUtil.ingresaEstacioncamposminimos(datoss, tipoest);
+					est_id = campos[1];
 
 				}
 				if (i == 1) {
 
 					int j = 2;
-					fen_id = new String[campos.length];
+					fen_id = new String[campos.length-2];
 
 					while (j != campos.length) {
-						fen_id[j] = campos[j]; // este va de ley
+						fen_id[j-2] = campos[j]; // este va de ley
 						String[] nombre = campos[j].split("_");
 						String fennombre = nombre[0];
 						String fentipo = "";
@@ -143,8 +144,8 @@ public class GestorArchivos implements Runnable {
 						else if (nombre.length > 1)
 							fentipo = nombre[1];
 						String fendescripcion = fennombre;
-						String[] datoss = new String[3];
-						datoss[0] = fennombre;
+						String[] datoss = new String[4];
+						datoss[0] = fen_id[j-2];
 						datoss[1] = fennombre;
 						datoss[2] = fendescripcion;
 						datoss[3] = fentipo;
@@ -157,21 +158,24 @@ public class GestorArchivos implements Runnable {
 				}
 				if (i == 2) {
 
-					uni_id = new String[campos.length];
-					String[] datoss = new String[3];
+					uni_id = new String[campos.length-2];
+					String[] datoss = new String[4];
 					int j = 2;
 					while (j != campos.length) {
-						uni_id[j] = campos[j];
+						uni_id[j-2] = campos[j];
 						datoss[0] = campos[j];
 						datoss[1] = campos[j];
 						datoss[2] = campos[j];
-
+						datoss[3] = campos[j];
+						
 						daoUtil.ingresaUnidade(datoss);
 
-						datoss = new String[2];
-						datoss[0] = uni_id[j];
-						datoss[1] = fen_id[j];
-
+						datoss = new String[5];
+						datoss[0] = uni_id[j-2];
+						datoss[1] = fen_id[j-2];
+						datoss[2] =""; 
+						datoss[3] = "";
+						datoss[4] = "";
 						daoUtil.ingresaFenomenoUnidade(datoss);
 
 						j++;
@@ -187,9 +191,9 @@ public class GestorArchivos implements Runnable {
 						datoss = new String[6];
 						datoss[0] = fecha;
 						datoss[1] = est_id;
-						datoss[2] = tip_id;
-						datoss[3] = uni_id[j];
-						datoss[4] = fen_id[j];
+						datoss[2] = String.valueOf(tip_id);
+						datoss[3] = uni_id[j-2];
+						datoss[4] = fen_id[j-2];
 						datoss[5] = obs_valor;
 						// guardaobservacion(est_id,tip_id,uni_id,fen_id,obs_valor,0);
 						// //0 indica q es el dato crudo
@@ -215,6 +219,7 @@ public class GestorArchivos implements Runnable {
 			Log.getInstance().info("Se terminó de leer el archivo: " + arch);
 
 		} catch (Exception e) {
+		e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 
