@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 
-public class PropsUtil {
+public class ConfigUtil {
 
 	public static String CONFIG_PROPERTIES_FILE_NAME = "config.properties";
 
-	private PropsUtil() {
+	private ConfigUtil() {
 	}
 
 	/**
@@ -52,5 +52,16 @@ public class PropsUtil {
 
 	public static Properties getConfigProperties() throws Exception {
 		return load(CONFIG_PROPERTIES_FILE_NAME);
+	}
+	
+	public static void main(String [] args){
+		try {
+			String folder = ConfigUtil.getConfigProperties().getProperty("repository.folder");
+			System.out.println(folder);
+			System.out.println("Terminado");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 }

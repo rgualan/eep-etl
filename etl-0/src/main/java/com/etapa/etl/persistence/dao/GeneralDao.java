@@ -2,77 +2,45 @@ package com.etapa.etl.persistence.dao;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
+import com.etapa.etl.persistence.manager.Persistence;
 import com.etapa.etl.util.Log;
 
 public class GeneralDao {
 
-	protected EntityManager em;
-
-	public GeneralDao(EntityManager em) {
-		this.em = em;
+	public GeneralDao() {
+		Persistence.createEntityManager();
 	}
 
-	public void insert(Object obj) throws Exception {
+	public static void insert(Object obj) throws Exception {
 		Log.getInstance().info("Insert entity: " + obj);
-		em.persist(obj);
+
+		Persistence.beginTransaction();
+		Persistence.persist(obj);
+		Persistence.commitTransaction();
 
 	}
 
-	public void update(Object obj) throws Exception {
+	public static void update(Object obj) throws Exception {
 		Log.getInstance().info("Update entity: " + obj);
-		obj = em.merge(obj);
+
+		Persistence.beginTransaction();
+		Persistence.update(obj);
+		Persistence.commitTransaction();
 	}
 
-	public void delete(Object obj) throws Exception {
+	public static void delete(Object obj) throws Exception {
 		Log.getInstance().info("Delete entity: " + obj);
-		em.remove(em.merge(obj));
+
+		Persistence.beginTransaction();
+		Persistence.remove(obj);
+		Persistence.commitTransaction();
 	}
 
-	public <T> List<T> queryAll(Class<T> entityClass) {
-		Log.getInstance().info("Query all: " + entityClass.getSimpleName());
-		// CriteriaBuilder qb = em.getCriteriaBuilder();
-		CriteriaBuilder cb = em.getEntityManagerFactory().getCriteriaBuilder();
-		CriteriaQuery<T> query = cb.createQuery(entityClass);
-		Root<T> entityRoot = query.from(entityClass);
-		query.select(entityRoot);
-
-		List<T> list = em.createQuery(query).getResultList();
-		// Log.getInstance().debug("Results:");
-		// for (T t : list) {
-		// Log.getInstance().debug(t);
-		// }
-
-		return list;
-
-		// return em.createQuery(query).getResultList();
+	public static <T> T find(Class<T> type, Object pk) throws Exception {
+		return Persistence.find(type, pk);
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T> List<T> queryAll(String className) throws Exception {
-		Log.getInstance().info("Query all: " + className);
-		CriteriaBuilder qb = em.getCriteriaBuilder();
-		Class<T> cls = (Class<T>) Class.forName(className);
-		CriteriaQuery<T> query = qb.createQuery(cls);
-		return em.createQuery(query).getResultList();
-	}
-
-	public void insertBatch(List<? extends Object> objects) throws Exception {
-		if (objects == null || objects.size() <= 0) {
-			return;
-		}
-
-		Log.getInstance().warn(
-				"Insert batch registers. Total " + objects.size() + ". Type: "
-						+ objects.get(0).getClass().getSimpleName());
-
-		for (Object object : objects) {
-			em.persist(object);
-		}
-
+	public static <T> List<T> queryAll(Class<T> entityClass) {
+		return Persistence.queryAll(entityClass);
 	}
 }

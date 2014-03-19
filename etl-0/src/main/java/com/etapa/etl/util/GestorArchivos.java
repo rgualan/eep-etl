@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.etapa.etl.persistence.entity.TipoEstacion;
+import com.etapa.etl.persistence.manager.Persistencia;
 
 public class GestorArchivos implements Runnable {
 	Long posini;
@@ -96,20 +97,18 @@ public class GestorArchivos implements Runnable {
 					tipo[1] = campos[7];
 					tip_id = campos[7];
 					try {
-						per.cargarPersistencia();
 						per.ingresaTipoEstacion(tipo);
-						per.cerrarpersistencia();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 					// /sacar el id del tipo
 					TipoEstacion tipoest = null;
 					try {
-						per.cargarPersistencia();
+
 						tipoest = per.consultaTipoEstacionporNombre(campos[7]);
 						System.out.println("ESTA ES EL TIPO = "
 								+ tipoest.getTipNombre());
-						per.cerrarpersistencia();
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -134,9 +133,9 @@ public class GestorArchivos implements Runnable {
 					datoss[6] = campos[5];
 					datoss[7] = campos[6];
 					try {
-						per.cargarPersistencia();
+
 						per.ingresaEstacioncamposminimos(datoss, tipoest);
-						per.cerrarpersistencia();
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -163,9 +162,9 @@ public class GestorArchivos implements Runnable {
 						datoss[2] = fendescripcion;
 						datoss[3] = fentipo;
 						try {
-							per.cargarPersistencia();
+
 							per.ingresaFenomeno(datoss);
-							per.cerrarpersistencia();
+
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -184,9 +183,9 @@ public class GestorArchivos implements Runnable {
 						datoss[1] = campos[j];
 						datoss[2] = campos[j];
 						try {
-							per.cargarPersistencia();
+
 							per.ingresaUnidade(datoss);
-							per.cerrarpersistencia();
+
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -194,9 +193,9 @@ public class GestorArchivos implements Runnable {
 						datoss[0] = uni_id[j];
 						datoss[1] = fen_id[j];
 						try {
-							per.cargarPersistencia();
+
 							per.ingresaFenomenoUnidade(datoss);
-							per.cerrarpersistencia();
+
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -220,9 +219,9 @@ public class GestorArchivos implements Runnable {
 						// guardaobservacion(est_id,tip_id,uni_id,fen_id,obs_valor,0);
 						// //0 indica q es el dato crudo
 						try {
-							per.cargarPersistencia();
+
 							per.ingresaObservacion(datoss);
-							per.cerrarpersistencia();
+
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -232,8 +231,9 @@ public class GestorArchivos implements Runnable {
 				i++;
 			}
 			try {// //AQUI DEBE SER LO DEL ARCHIVO
-				// crearchivo(path,tam); //insert si es la primera vez q lee el
-				// archivo
+					// crearchivo(path,tam); //insert si es la primera vez q lee
+					// el
+					// archivo
 			} catch (Exception e) {
 				// guardatamarchivo(path,tam); //alter si ya existe la tabla tam
 				// es el tam q se ha leido.

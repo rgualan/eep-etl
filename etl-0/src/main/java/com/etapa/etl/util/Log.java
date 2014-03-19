@@ -12,11 +12,11 @@ import org.apache.log4j.helpers.Loader;
  */
 public final class Log {
 
+	private final String LOG_NAME = "etapa-etl";
+
 	public static Logger INSTANCE = null;
 
-	private final String LOG_NAME = "sdw";
-
-	public Log() {
+	private Log() {
 		try {
 			URL url = Loader.getResource("log4j.properties");
 			PropertyConfigurator.configure(url);
@@ -32,5 +32,21 @@ public final class Log {
 			new Log();
 		}
 		return INSTANCE;
+	}
+
+	public synchronized static void info(Object message) {
+		getInstance().info(message);
+	}
+
+	public synchronized static void warn(Object message) {
+		getInstance().warn(message);
+	}
+
+	public synchronized static void error(Object message) {
+		getInstance().error(message);
+	}
+
+	public synchronized static void error(Object message, Throwable t) {
+		getInstance().error(message, t);
 	}
 }
