@@ -13,16 +13,17 @@ import com.etapa.etl.util.Log;
 
 public final class JpaManagerFactory {
 
-	private final static String PERSISTENCE_UNIT = "etl";
-
 	private static JpaManagerFactory INSTANCE = null;
 
 	private EntityManagerFactory emf = null;
 
+	private final static String PERSISTENCE_UNIT = "etl";
+
 	private final static Logger log = Log.getInstance();
 
 	private JpaManagerFactory() {
-		createEntityManagerFactory();
+		// Avoid creating the entity manager here, because the close method
+		// problem
 	}
 
 	public static void createEntityManagerFactory() {
@@ -30,14 +31,18 @@ public final class JpaManagerFactory {
 	}
 
 	public static void createEntityManagerFactory(final String persistenceUnit) {
+		Log.getInstance().info("Initialize persistence");
 		Long start = System.currentTimeMillis(); // Start
 		getInstance().emf = Persistence
 				.createEntityManagerFactory(persistenceUnit);
-		log.info("Load time for persistence: "
+		Log.getInstance().info("Load time for persistence: "
 				+ FormatDates.getMinuteFormat().format(
 						new Date(System.currentTimeMillis() - start)));
+
 	}
 
+	// Creador sincronizado para protegerse de posibles problemas multi-hilo
+	// otra prueba para evitar instanciación múltiple
 	private synchronized static void createInstance() {
 		if (INSTANCE == null) {
 			INSTANCE = new JpaManagerFactory();
@@ -46,7 +51,7 @@ public final class JpaManagerFactory {
 
 	private static JpaManagerFactory getInstance() {
 		if (INSTANCE == null) {
-			createInstance();;
+			createInstance();
 		}
 		return INSTANCE;
 	}
@@ -56,12 +61,11 @@ public final class JpaManagerFactory {
 	}
 
 	public static EntityManagerFactory getEntityManagerFactory() {
-
 		return getInstance().emf;
 	}
 
 	public static void close() {
-		log.info("Close entity manager factory");
+		Log.getInstance().info("Close entity manager factory");
 		if (getInstance().emf != null) {
 			getInstance().emf.close();
 		}

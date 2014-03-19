@@ -1,9 +1,5 @@
-package com.etapa.etl.persistence.manager;
+package com.etapa.etl.persistence.dao;
 
-import java.util.List;
-
-import com.etapa.etl.persistence.dao.GeneralDao;
-import com.etapa.etl.persistence.dao.TipoEstacionDao;
 import com.etapa.etl.persistence.entity.Archivo;
 import com.etapa.etl.persistence.entity.Estacion;
 import com.etapa.etl.persistence.entity.EstacionPK;
@@ -14,18 +10,20 @@ import com.etapa.etl.persistence.entity.Observacion;
 import com.etapa.etl.persistence.entity.ObservacionPK;
 import com.etapa.etl.persistence.entity.TipoEstacion;
 import com.etapa.etl.persistence.entity.Unidade;
+import com.etapa.etl.persistence.manager.JpaManager;
+import com.etapa.etl.util.Log;
 
-public class Persistencia {
+public class DaoUtil {
 
-	public Persistencia() {
-		// System.out.println("Cargando la persistencia...");
+	public DaoUtil() {
+		// Log.getInstance().info("Cargando la persistencia...");
 		//
 		// try {
 		// // Cargar persistencia
 		// emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
 		// em = emf.createEntityManager();
 		//
-		// System.out.println("Persistencia cargada");
+		// Log.getInstance().info("Persistencia cargada");
 		// } catch (Exception e) {
 		// Log.error("Error", e);
 		// }
@@ -44,14 +42,14 @@ public class Persistencia {
 		// }
 		// }
 		// if (resultList != null) {
-		// System.out.println("Resultado: ");
+		// Log.getInstance().info("Resultado: ");
 		// for (Archivo archivo : resultList) {
-		// System.out.println(archivo.getArcPath());
+		// Log.getInstance().info(archivo.getArcPath());
 		// }
 		// }
 		// return resultList;
 
-		return Persistence.find(Archivo.class, id);
+		return JpaManager.find(Archivo.class, id);
 
 	}
 
@@ -68,14 +66,14 @@ public class Persistencia {
 		// }
 		// }
 		// if (resultList != null) {
-		// System.out.println("Resultado: ");
+		// Log.getInstance().info("Resultado: ");
 		// for (TipoEstacion tip : resultList) {
-		// System.out.println(tip.getTipNombre());
+		// Log.getInstance().info(tip.getTipNombre());
 		// }
 		// }
 		// return resultList;
 
-		return Persistence.find(TipoEstacion.class, id);
+		return JpaManager.find(TipoEstacion.class, id);
 	}
 
 	public TipoEstacion consultaTipoEstacionporNombre(String nombre) {
@@ -97,9 +95,9 @@ public class Persistencia {
 		// }
 		// }
 		// if (resultList != null) {
-		// System.out.println("Resultado: ");
+		// Log.getInstance().info("Resultado: ");
 		// for (Estacion est : resultList) {
-		// System.out.println(est.getEstToa());
+		// Log.getInstance().info(est.getEstToa());
 		// }
 		// }
 		// return resultList;
@@ -125,9 +123,9 @@ public class Persistencia {
 		// }
 		// }
 		// if (resultList != null) {
-		// System.out.println("Resultado: ");
+		// Log.getInstance().info("Resultado: ");
 		// for (Fenomeno fen : resultList) {
-		// System.out.println(fen.getFenId());
+		// Log.getInstance().info(fen.getFenId());
 		// }
 		// }
 		// return resultList;
@@ -149,9 +147,9 @@ public class Persistencia {
 	// }
 	// }
 	// if (resultList != null) {
-	// System.out.println("Resultado: ");
+	// Log.getInstance().info("Resultado: ");
 	// for (Unidade uni : resultList) {
-	// System.out.println(uni.getUniId());
+	// Log.getInstance().info(uni.getUniId());
 	// }
 	// }
 	// return resultList;
@@ -172,9 +170,9 @@ public class Persistencia {
 	// }
 	// }
 	// if (resultList != null) {
-	// System.out.println("Resultado: ");
+	// Log.getInstance().info("Resultado: ");
 	// for (FenomenoUnidade fen : resultList) {
-	// System.out.println(fen.getFeuAlturasensor());
+	// Log.getInstance().info(fen.getFeuAlturasensor());
 	// }
 	// }
 	// return resultList;
@@ -199,145 +197,140 @@ public class Persistencia {
 
 	}
 
-	public void ingresaArchivo(String campos[]) {
-		try {
-			Archivo newEntity = new Archivo();
-			newEntity.setArcPath(campos[0]);
-			newEntity.setArcNbytes(Long.valueOf(campos[1]));
-			GeneralDao.insert(newEntity);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public void ingresaArchivo(String campos[]) throws Exception {
+		Archivo newEntity = new Archivo();
+		newEntity.setArcPath(campos[0]);
+		newEntity.setArcNbytes(Long.valueOf(campos[1]));
+		GeneralDao.insert(newEntity);
 	}
 
-	public void ingresaTipoEstacion(String campos[]) {
-		try {
-			TipoEstacion newEntity = new TipoEstacion();
-			newEntity.setTipNombre(campos[0]);
-			newEntity.setTipDescripcion(campos[1]);
-			GeneralDao.insert(newEntity);
-		} catch (Exception e) {
-			e.printStackTrace();
+	public TipoEstacion buscaoIngresaTipoEstacion(String campos[]) throws Exception {
+		// Buscar
+		TipoEstacion entity = JpaManager.find(TipoEstacion.class, campos[0]);
+
+		if (entity == null) {
+			// Ingresar
+
+			entity = new TipoEstacion();
+			entity.setTipNombre(campos[0]);
+			entity.setTipDescripcion(campos[1]);
+			GeneralDao.insert(entity);
 		}
+
+		return entity;
 	}
 
 	public void ingresaEstacioncamposminimos(String campos[], TipoEstacion tip)
+			throws Exception
 	// campos basicos est_id, tipo_id, toa,modelodatalog,codigotadalog, std,
 	// verionprog,num
 	{
-		try {
-			System.out.println("ESTE R =" + campos[1]);
-			// cargarPersistencia();
-			// TipoEstacion tip=consultaTipoEstacionporNombre(campos[1]);
+		Log.getInstance().info("ESTE R =" + campos[1]);
 
-			Estacion newEntity = new Estacion();
-			EstacionPK id = new EstacionPK();
-			id.setEstId(campos[0]);
-			id.setTipId(tip.getTipId());
-			newEntity.setTipoEstacion(tip);
-			System.out.println("ESTE DE AQUI" + id.getTipId());
-			newEntity.setId(id);
-			newEntity.setEstToa(campos[2]);
-			newEntity.setEstModelodatalog(campos[3]);
-			newEntity.setEstCodigodatalog(campos[4]);
-			newEntity.setEstStd(campos[5]);
-			newEntity.setEstVersionprog(campos[6]);
-			newEntity.setEstNum(campos[7]);
+		// Insertar
+		Estacion newEntity = new Estacion();
+		EstacionPK id = new EstacionPK();
+		id.setEstId(campos[0]);
+		id.setTipId(tip.getTipId());
+		newEntity.setTipoEstacion(tip);
+		Log.getInstance().info("ESTE DE AQUI" + id.getTipId());
+		newEntity.setId(id);
+		newEntity.setEstToa(campos[2]);
+		newEntity.setEstModelodatalog(campos[3]);
+		newEntity.setEstCodigodatalog(campos[4]);
+		newEntity.setEstStd(campos[5]);
+		newEntity.setEstVersionprog(campos[6]);
+		newEntity.setEstNum(campos[7]);
 
-			GeneralDao.insert(newEntity);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		GeneralDao.insert(newEntity);
+
 	}
 
-	public void ingresaFenomeno(String campos[]) {
-		try {
-			Fenomeno newEntity = new Fenomeno();
-			newEntity.setFenId(campos[0]);
-			newEntity.setFenNombre(campos[1]);
-			newEntity.setFenDescripcion(campos[2]);
-			newEntity.setFenTipo(campos[3]);
+	public Fenomeno ingresaFenomeno(String campos[]) throws Exception {
+		Fenomeno entity = JpaManager.find(Fenomeno.class, campos[0]);
 
-			GeneralDao.insert(newEntity);
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (entity == null) {
+			// Ingresar
+			entity = new Fenomeno();
+			entity.setFenId(campos[0]);
+			entity.setFenNombre(campos[1]);
+			entity.setFenDescripcion(campos[2]);
+			entity.setFenTipo(campos[3]);
+
+			GeneralDao.insert(entity);
 		}
+
+		return entity;
 	}
 
-	public void ingresaUnidade(String campos[]) {
-		try {
-			Unidade newEntity = new Unidade();
-			newEntity.setUniId(campos[0]);
-			newEntity.setUniNombre(campos[1]);
-			newEntity.setUniDescripcion(campos[2]);
-			newEntity.setUniTipo(campos[3]);
+	public Unidade ingresaUnidade(String campos[]) throws Exception {
+		Unidade entity = JpaManager.find(Unidade.class, campos[0]);
 
-			GeneralDao.insert(newEntity);
+		if (entity == null) {
+			// Ingresar
 
-		} catch (Exception e) {
-			e.printStackTrace();
+			entity = new Unidade();
+			entity.setUniId(campos[0]);
+			entity.setUniNombre(campos[1]);
+			entity.setUniDescripcion(campos[2]);
+			entity.setUniTipo(campos[3]);
+
+			GeneralDao.insert(entity);
 		}
+		
+		return entity;
 	}
 
-	public void ingresaFenomenoUnidade(String campos[]) {
-		try {
-			// List<Fenomeno> fen = this.consultaFenomeno(campos[0]);
-			Fenomeno fen = Persistence.find(Fenomeno.class, campos[0]);
+	public void ingresaFenomenoUnidade(String campos[]) throws Exception {
+		// List<Fenomeno> fen = this.consultaFenomeno(campos[0]);
+		Fenomeno fen = JpaManager.find(Fenomeno.class, campos[0]);
 
-			// List<Unidade> uni = this.consultaUnidade(campos[1]);
-			Unidade uni = Persistence.find(Unidade.class, campos[1]);
+		// List<Unidade> uni = this.consultaUnidade(campos[1]);
+		Unidade uni = JpaManager.find(Unidade.class, campos[1]);
 
-			FenomenoUnidade newEntity = new FenomenoUnidade();
-			newEntity.setFenomeno(fen);
-			newEntity.setUnidade(uni);
-			newEntity.setFeuMaximo(Double.valueOf(campos[2]));
-			newEntity.setFeuMinimo(Double.valueOf(campos[3]));
-			newEntity.setFeuAlturasensor(Double.valueOf(campos[4]));
+		FenomenoUnidade newEntity = new FenomenoUnidade();
+		newEntity.setFenomeno(fen);
+		newEntity.setUnidade(uni);
+		newEntity.setFeuMaximo(Double.valueOf(campos[2]));
+		newEntity.setFeuMinimo(Double.valueOf(campos[3]));
+		newEntity.setFeuAlturasensor(Double.valueOf(campos[4]));
 
-			GeneralDao.insert(newEntity);
+		GeneralDao.insert(newEntity);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
-	public void ingresaObservacion(String campos[]) {
-		try {
+	public void ingresaObservacion(String campos[]) throws Exception {
+		FenomenoUnidadePK fenUniPk = new FenomenoUnidadePK();
+		fenUniPk.setFenId(campos[3]);
+		fenUniPk.setFenId(campos[4]);
+		FenomenoUnidade fenuni = JpaManager.find(FenomenoUnidade.class,
+				fenUniPk);
 
-			FenomenoUnidadePK fenUniPk = new FenomenoUnidadePK();
-			fenUniPk.setFenId(campos[3]);
-			fenUniPk.setFenId(campos[4]);
-			FenomenoUnidade fenuni = Persistence.find(FenomenoUnidade.class,
-					fenUniPk);
+		EstacionPK estPk = new EstacionPK();
+		estPk.setEstId(campos[1]);
+		estPk.setEstId(campos[2]);
+		Estacion est = JpaManager.find(Estacion.class, estPk);
 
-			EstacionPK estPk = new EstacionPK();
-			estPk.setEstId(campos[1]);
-			estPk.setEstId(campos[2]);
-			Estacion est = Persistence.find(Estacion.class, estPk);
+		Observacion newEntity = new Observacion();
+		ObservacionPK id = new ObservacionPK();
+		id.setObsFecha(new java.util.Date(campos[0]));
+		newEntity.setId(id);
+		newEntity.setEstacion(est);
+		newEntity.setFenomenoUnidade(fenuni);
+		newEntity.setObsValor(campos[5]);
 
-			Observacion newEntity = new Observacion();
-			ObservacionPK id = new ObservacionPK();
-			id.setObsFecha(new java.util.Date(campos[0]));
-			newEntity.setId(id);
-			newEntity.setEstacion(est);
-			newEntity.setFenomenoUnidade(fenuni);
-			newEntity.setObsValor(campos[5]);
+		GeneralDao.insert(newEntity);
 
-			GeneralDao.insert(newEntity);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	// public void cerrarpersistencia() {
-	// System.out.println("Cerrando la pesistencia...");
+	// Log.getInstance().info("Cerrando la pesistencia...");
 	// try {
 	// em.close();
 	// emf.close();
-	// System.out.println("Persistencia cerrada");
+	// Log.getInstance().info("Persistencia cerrada");
 	// } catch (Exception e) {
-	// e.printStackTrace();
+	// Log.getInstance().error(e);
 	// }
 	// }
 }

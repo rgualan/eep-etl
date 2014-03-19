@@ -1,4 +1,4 @@
-package com.etapa.etl.util;
+package com.etapa.etl.logic.core;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,24 +6,25 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.etapa.etl.persistence.dao.DaoUtil;
 import com.etapa.etl.persistence.entity.TipoEstacion;
-import com.etapa.etl.persistence.manager.Persistencia;
+import com.etapa.etl.util.Log;
 
 public class GestorArchivos implements Runnable {
 	Long posini;
 	String arch;
 	String separador;
-	Persistencia per;
+	DaoUtil daoUtil;
 
 	public GestorArchivos(Long posini, String arch, String separador) {
 		this.posini = posini;
 		this.arch = arch;
 		this.separador = separador;
-		per = new Persistencia();
+		daoUtil = new DaoUtil();
 	}
 
 	public GestorArchivos() {
-		per = new Persistencia();
+		daoUtil = new DaoUtil();
 	}
 
 	RandomAccessFile archivo;
@@ -35,8 +36,8 @@ public class GestorArchivos implements Runnable {
 		return archivos;
 	}
 
-	public List<String> leerarchivo(Long posinicial, String path) {
-		List<String> datos = new ArrayList();
+	public List<String> leerArchivo(Long posinicial, String path) {
+		List<String> datos = new ArrayList<String>();
 
 		try {
 			archivo = new RandomAccessFile(path, "r");
@@ -49,42 +50,46 @@ public class GestorArchivos implements Runnable {
 					if (n != null)
 						datos.add(n);
 				}
-				// System.out.println(n); //se muestra en pantalla
+				// Log.getInstance().info(n); //se muestra en pantalla
 			}
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			System.out.println("NO SE ENCONTRO EL ARCHIVO");
-			e.printStackTrace();
+			Log.getInstance().info("NO SE ENCONTRO EL ARCHIVO");
+			Log.getInstance().error(e);
+		} finally {
+			try {
+				archivo.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				Log.getInstance().error(e);
+			}
+
 		}
-		try {
-			archivo.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 		return datos;
 
 	}
 
 	public void run() {
-		// TODO Auto-generated method stub
+
 		try {
 
-			String path = arch;
-			System.out.println("INTENTA LLENAR LA BD");
-			List<String> lineas = leerarchivo(posini, arch);
-			System.out.println("INTENTA LLENAR LA BD2");
+			// String path = arch;
+			Log.getInstance().info("INTENTA LLENAR LA BD");
+			List<String> lineas = leerArchivo(posini, arch);
+
+			Log.getInstance().info("INTENTA LLENAR LA BD2");
 			String[] campos;
-			Long tam = (long) lineas.size();
+			// Long tam = (long) lineas.size();
 			// /****/****/*// guardar esto en la bd
 			// guarda la long del archivo
 			String est_id = null;
 			String tip_id = null;
 			String[] fen_id = null;
 			String[] uni_id = null;
-			System.out.println("ESTE ES EL TAM QUE DEBE LEER + "
-					+ lineas.size());
+			Log.getInstance().info(
+					"ESTE ES EL TAM QUE DEBE LEER + " + lineas.size());
 			int i = 0;
 			while (i != lineas.size()) {
 				campos = lineas.get(i).split(separador);
@@ -92,26 +97,13 @@ public class GestorArchivos implements Runnable {
 				{
 
 					// tip_nombre = campos[7]; //tip_nombre
-					String[] tipo = new String[2];
-					tipo[0] = campos[7];
-					tipo[1] = campos[7];
+					String[] aTipo = new String[2];
+					aTipo[0] = campos[7];
+					aTipo[1] = campos[7];
 					tip_id = campos[7];
-					try {
-						per.ingresaTipoEstacion(tipo);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					// /sacar el id del tipo
-					TipoEstacion tipoest = null;
-					try {
 
-						tipoest = per.consultaTipoEstacionporNombre(campos[7]);
-						System.out.println("ESTA ES EL TIPO = "
-								+ tipoest.getTipNombre());
+					TipoEstacion tipoest = daoUtil.buscaoIngresaTipoEstacion(aTipo);
 
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
 					/*
 					 * est_id= campos[1]; String tipid =
 					 * String.valueOf(tipoest.get(0).getTipId());//lo q saque
@@ -132,13 +124,8 @@ public class GestorArchivos implements Runnable {
 					datoss[5] = campos[4];
 					datoss[6] = campos[5];
 					datoss[7] = campos[6];
-					try {
 
-						per.ingresaEstacioncamposminimos(datoss, tipoest);
-
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					daoUtil.ingresaEstacioncamposminimos(datoss, tipoest);
 
 				}
 				if (i == 1) {
@@ -161,13 +148,9 @@ public class GestorArchivos implements Runnable {
 						datoss[1] = fennombre;
 						datoss[2] = fendescripcion;
 						datoss[3] = fentipo;
-						try {
 
-							per.ingresaFenomeno(datoss);
+						daoUtil.ingresaFenomeno(datoss);
 
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
 						j++;
 					}
 
@@ -182,23 +165,15 @@ public class GestorArchivos implements Runnable {
 						datoss[0] = campos[j];
 						datoss[1] = campos[j];
 						datoss[2] = campos[j];
-						try {
 
-							per.ingresaUnidade(datoss);
+						daoUtil.ingresaUnidade(datoss);
 
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
 						datoss = new String[2];
 						datoss[0] = uni_id[j];
 						datoss[1] = fen_id[j];
-						try {
 
-							per.ingresaFenomenoUnidade(datoss);
+						daoUtil.ingresaFenomenoUnidade(datoss);
 
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
 						j++;
 					}
 
@@ -218,18 +193,15 @@ public class GestorArchivos implements Runnable {
 						datoss[5] = obs_valor;
 						// guardaobservacion(est_id,tip_id,uni_id,fen_id,obs_valor,0);
 						// //0 indica q es el dato crudo
-						try {
+						daoUtil.ingresaObservacion(datoss);
 
-							per.ingresaObservacion(datoss);
-
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
 						j++;
 					}
 				}
 				i++;
 			}
+			
+			// TODO falta esta parte
 			try {// //AQUI DEBE SER LO DEL ARCHIVO
 					// crearchivo(path,tam); //insert si es la primera vez q lee
 					// el
@@ -240,9 +212,11 @@ public class GestorArchivos implements Runnable {
 
 			}
 
-		} finally {
-			System.out.println("termino de leer archivo " + arch);
-			// per.cerrarpersistencia();
+			Log.getInstance().info("Se terminó de leer el archivo: " + arch);
+
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
+
 	}
 }

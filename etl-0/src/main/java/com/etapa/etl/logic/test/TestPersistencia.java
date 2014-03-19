@@ -1,19 +1,21 @@
 package com.etapa.etl.logic.test;
 
-import com.etapa.etl.persistence.manager.Persistence;
+import com.etapa.etl.persistence.manager.JpaManagerFactory;
 import com.etapa.etl.util.Log;
 
 public class TestPersistencia {
 
 	public static void main(String[] args) throws Exception {
 
-		Log.info("Prueba de las operaciones básicas de la persistencia...");
+		Log.getInstance().info("Prueba de las operaciones básicas de la persistencia...");
 
-		Persistence.createEntityManager();
-
-		Persistence.close();
+//		Persistence.createEntityManager();
+//		Persistence.close();
 		
-		Log.info("Fin");
+		JpaManagerFactory.createEntityManagerFactory();
+		JpaManagerFactory.close();
+		
+		Log.getInstance().info("Fin");
 	}
 
 }

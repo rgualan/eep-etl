@@ -33,20 +33,4 @@ public final class Log {
 		}
 		return INSTANCE;
 	}
-
-	public synchronized static void info(Object message) {
-		getInstance().info(message);
-	}
-
-	public synchronized static void warn(Object message) {
-		getInstance().warn(message);
-	}
-
-	public synchronized static void error(Object message) {
-		getInstance().error(message);
-	}
-
-	public synchronized static void error(Object message, Throwable t) {
-		getInstance().error(message, t);
-	}
 }

@@ -6,9 +6,9 @@ import com.etapa.etl.util.Log;
 public class TestLogger {
 
 	public static void main(String[] args) {
-		Log.info("Hola mundo!");
-		Log.warn("Advertencia!");
-		Log.error("Error!");
+		Log.getInstance().info("Hola mundo!");
+		Log.getInstance().warn("Advertencia!");
+		Log.getInstance().error("Error!");
 	}
 
 }

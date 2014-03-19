@@ -12,7 +12,7 @@ public class TestProperties {
 			Log.getInstance().debug(path);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.getInstance().error(e);
 		}
 	}
 

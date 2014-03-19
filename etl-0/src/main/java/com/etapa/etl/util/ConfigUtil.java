@@ -60,7 +60,7 @@ public class ConfigUtil {
 			System.out.println(folder);
 			System.out.println("Terminado");
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.getInstance().error(e);
 		}
 		
 	}

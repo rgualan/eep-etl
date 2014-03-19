@@ -1,10 +1,10 @@
-package com.etapa.etl.util;
+package com.etapa.etl.logic.core;
 
-import com.etapa.etl.persistence.manager.Persistencia;
+import com.etapa.etl.persistence.dao.DaoUtil;
 
 public class Consultas<T> {
 	T obj;
-	Persistencia p;
+	DaoUtil p;
 	Object dao;
 	String item;
 
@@ -60,20 +60,20 @@ public class Consultas<T> {
 	// System.err.println(obj.getClass().getDeclaredFields()[1]);
 	// } catch (InvocationTargetException e) {
 	// // TODO Auto-generated catch block
-	// e.printStackTrace();
+	// Log.getInstance().error(e);
 	// }
 	//
 	// // obj.getClass().getDeclaredFields()[1].set(obj, "test");
 	// // obj.getClass().getDeclaredFields()[2].set(obj, Long.MIN_VALUE);
 	// } catch (IllegalArgumentException e) {
 	// // TODO Auto-generated catch block
-	// e.printStackTrace();
+	// Log.getInstance().error(e);
 	// } catch (SecurityException e) {
 	// // TODO Auto-generated catch block
-	// e.printStackTrace();
+	// Log.getInstance().error(e);
 	// } catch (IllegalAccessException e) {
 	// // TODO Auto-generated catch block
-	// e.printStackTrace();
+	// Log.getInstance().error(e);
 	// }// .setArcNbytes(Long.MIN_VALUE);
 	// // newEntitiesList.add(newEntity);
 	// // Iniciar transaccion

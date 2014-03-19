@@ -4,7 +4,7 @@ import javax.persistence.TypedQuery;
 
 import com.etapa.etl.persistence.entity.Estacion;
 import com.etapa.etl.persistence.entity.EstacionPK;
-import com.etapa.etl.persistence.manager.Persistence;
+import com.etapa.etl.persistence.manager.JpaManager;
 
 public class EstacionDao extends GeneralDao {
 
@@ -12,7 +12,7 @@ public class EstacionDao extends GeneralDao {
 		EstacionPK id = new EstacionPK();
 		id.setEstId(estacionId);
 		id.setTipId(tipoestacionId);
-		TypedQuery<Estacion> query = Persistence
+		TypedQuery<Estacion> query = JpaManager
 				.getEntityManager()
 				.createQuery(
 						"Select e from Estacion e JOIN TipoEstacion t where e.id = :id",
@@ -27,7 +27,7 @@ public class EstacionDao extends GeneralDao {
 	}
 
 	public static Estacion queryBytipoestacion(int tipoestacionId) {
-		TypedQuery<Estacion> query = Persistence
+		TypedQuery<Estacion> query = JpaManager
 				.getEntityManager()
 				.createQuery(
 						"Select e from Estacion e JOIN TipoEstacion t where t.tipId = :tipoestacionId",
