@@ -194,8 +194,8 @@ public class GestorArchivos implements Runnable {
 						datoss[0] = fecha;
 						datoss[1] = est_id;
 						datoss[2] = String.valueOf(tip_id);
-						datoss[3] = uni_id[j-2];
-						datoss[4] = fen_id[j-2];
+						datoss[3] = fen_id[j-2];
+						datoss[4] = uni_id[j-2];						
 						datoss[5] = obs_valor;
 						// guardaobservacion(est_id,tip_id,uni_id,fen_id,obs_valor,0);
 						// //0 indica q es el dato crudo

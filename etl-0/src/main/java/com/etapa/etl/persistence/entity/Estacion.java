@@ -2,6 +2,7 @@ package com.etapa.etl.persistence.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.List;
 
 
 /**
@@ -9,9 +10,7 @@ import javax.persistence.*;
  * 
  */
 @Entity
-@NamedQueries(	
-	@NamedQuery(name = "Estacion.findAll", query = "SELECT e FROM Estacion e")
-	)
+@NamedQuery(name="Estacion.findAll", query="SELECT e FROM Estacion e")
 public class Estacion implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -54,10 +53,14 @@ public class Estacion implements Serializable {
 	@Column(name="est_versionprog")
 	private String estVersionprog;
 
-	//uni-directional many-to-one association to TipoEstacion
+	//bi-directional many-to-one association to TipoEstacion
 	@ManyToOne
 	@JoinColumn(name="tip_id")
 	private TipoEstacion tipoEstacion;
+
+	//bi-directional many-to-one association to Observacion
+	@OneToMany(mappedBy="estacion")
+	private List<Observacion> observacions;
 
 	public Estacion() {
 	}
@@ -172,6 +175,28 @@ public class Estacion implements Serializable {
 
 	public void setTipoEstacion(TipoEstacion tipoEstacion) {
 		this.tipoEstacion = tipoEstacion;
+	}
+
+	public List<Observacion> getObservacions() {
+		return this.observacions;
+	}
+
+	public void setObservacions(List<Observacion> observacions) {
+		this.observacions = observacions;
+	}
+
+	public Observacion addObservacion(Observacion observacion) {
+		getObservacions().add(observacion);
+		observacion.setEstacion(this);
+
+		return observacion;
+	}
+
+	public Observacion removeObservacion(Observacion observacion) {
+		getObservacions().remove(observacion);
+		observacion.setEstacion(null);
+
+		return observacion;
 	}
 
 }

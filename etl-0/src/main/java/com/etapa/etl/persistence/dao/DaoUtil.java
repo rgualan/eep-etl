@@ -317,8 +317,8 @@ public class DaoUtil {
 	public void ingresaObservacion(String campos[]) throws Exception {
 				
 		FenomenoUnidadePK fenUniPk = new FenomenoUnidadePK();
-		fenUniPk.setFenId(campos[4]);
-		fenUniPk.setUniId(campos[3]);		
+		fenUniPk.setFenId(campos[3]);
+		fenUniPk.setUniId(campos[4]);		
 		FenomenoUnidade fenuni = JpaManager.find(FenomenoUnidade.class,
 				fenUniPk);
 
@@ -329,16 +329,15 @@ public class DaoUtil {
 
 		Observacion newEntity = new Observacion();
 		ObservacionPK id = new ObservacionPK();
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:MM:SS");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date parsed = format.parse(campos[0]);
         java.sql.Date sql = new java.sql.Date(parsed.getTime());
         
-		id.setObsFecha(sql);
-		
+		id.setObsFecha(sql);		
 		id.setEstId(est.getId().getEstId());
 		id.setTipId(est.getId().getTipId());
-		id.setFenId(fenuni.getId().getFenId());
-		id.setUniId(fenuni.getId().getUniId());		
+		id.setUniId(fenuni.getId().getFenId());
+		id.setFenId(fenuni.getId().getUniId());		
 		newEntity.setId(id);
 		newEntity.setEstacion(est);
 		newEntity.setFenomenoUnidade(fenuni);

@@ -2,6 +2,7 @@ package com.etapa.etl.persistence.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.List;
 
 
 /**
@@ -16,7 +17,7 @@ public class TipoEstacion implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="tip_id", nullable=false)
+	@Column(name="tip_id", nullable=false)	
 	private Integer tipId;
 
 	@Column(name="tip_descripcion")
@@ -24,6 +25,10 @@ public class TipoEstacion implements Serializable {
 
 	@Column(name="tip_nombre")
 	private String tipNombre;
+
+	//bi-directional many-to-one association to Estacion
+	@OneToMany(mappedBy="tipoEstacion")
+	private List<Estacion> estacions;
 
 	public TipoEstacion() {
 	}
@@ -50,6 +55,28 @@ public class TipoEstacion implements Serializable {
 
 	public void setTipNombre(String tipNombre) {
 		this.tipNombre = tipNombre;
+	}
+
+	public List<Estacion> getEstacions() {
+		return this.estacions;
+	}
+
+	public void setEstacions(List<Estacion> estacions) {
+		this.estacions = estacions;
+	}
+
+	public Estacion addEstacion(Estacion estacion) {
+		getEstacions().add(estacion);
+		estacion.setTipoEstacion(this);
+
+		return estacion;
+	}
+
+	public Estacion removeEstacion(Estacion estacion) {
+		getEstacions().remove(estacion);
+		estacion.setTipoEstacion(null);
+
+		return estacion;
 	}
 
 }

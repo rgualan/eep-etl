@@ -12,7 +12,7 @@ public class ObservacionPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="obs_fecha")
 	private java.util.Date obsFecha;
 
@@ -22,11 +22,11 @@ public class ObservacionPK implements Serializable {
 	@Column(name="tip_id", insertable=false, updatable=false)
 	private Integer tipId;
 
-	@Column(name="uni_id", insertable=false, updatable=false)
-	private String uniId;
-
 	@Column(name="fen_id", insertable=false, updatable=false)
 	private String fenId;
+
+	@Column(name="uni_id", insertable=false, updatable=false)
+	private String uniId;
 
 	public ObservacionPK() {
 	}
@@ -48,17 +48,17 @@ public class ObservacionPK implements Serializable {
 	public void setTipId(Integer tipId) {
 		this.tipId = tipId;
 	}
-	public String getUniId() {
-		return this.uniId;
-	}
-	public void setUniId(String uniId) {
-		this.uniId = uniId;
-	}
 	public String getFenId() {
 		return this.fenId;
 	}
 	public void setFenId(String fenId) {
 		this.fenId = fenId;
+	}
+	public String getUniId() {
+		return this.uniId;
+	}
+	public void setUniId(String uniId) {
+		this.uniId = uniId;
 	}
 
 	public boolean equals(Object other) {
@@ -73,8 +73,8 @@ public class ObservacionPK implements Serializable {
 			this.obsFecha.equals(castOther.obsFecha)
 			&& this.estId.equals(castOther.estId)
 			&& this.tipId.equals(castOther.tipId)
-			&& this.uniId.equals(castOther.uniId)
-			&& this.fenId.equals(castOther.fenId);
+			&& this.fenId.equals(castOther.fenId)
+			&& this.uniId.equals(castOther.uniId);
 	}
 
 	public int hashCode() {
@@ -83,8 +83,8 @@ public class ObservacionPK implements Serializable {
 		hash = hash * prime + this.obsFecha.hashCode();
 		hash = hash * prime + this.estId.hashCode();
 		hash = hash * prime + this.tipId.hashCode();
-		hash = hash * prime + this.uniId.hashCode();
 		hash = hash * prime + this.fenId.hashCode();
+		hash = hash * prime + this.uniId.hashCode();
 		
 		return hash;
 	}

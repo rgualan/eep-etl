@@ -2,6 +2,7 @@ package com.etapa.etl.persistence.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.List;
 
 
 /**
@@ -26,15 +27,19 @@ public class FenomenoUnidade implements Serializable {
 	@Column(name="feu_minimo")
 	private double feuMinimo;
 
-	//uni-directional many-to-one association to Fenomeno
+	//bi-directional many-to-one association to Fenomeno
 	@ManyToOne
 	@JoinColumn(name="fen_id")
 	private Fenomeno fenomeno;
 
-	//uni-directional many-to-one association to Unidade
+	//bi-directional many-to-one association to Unidade
 	@ManyToOne
 	@JoinColumn(name="uni_id")
 	private Unidade unidade;
+
+	//bi-directional many-to-one association to Observacion
+	@OneToMany(mappedBy="fenomenoUnidade")
+	private List<Observacion> observacions;
 
 	public FenomenoUnidade() {
 	}
@@ -85,6 +90,28 @@ public class FenomenoUnidade implements Serializable {
 
 	public void setUnidade(Unidade unidade) {
 		this.unidade = unidade;
+	}
+
+	public List<Observacion> getObservacions() {
+		return this.observacions;
+	}
+
+	public void setObservacions(List<Observacion> observacions) {
+		this.observacions = observacions;
+	}
+
+	public Observacion addObservacion(Observacion observacion) {
+		getObservacions().add(observacion);
+		observacion.setFenomenoUnidade(this);
+
+		return observacion;
+	}
+
+	public Observacion removeObservacion(Observacion observacion) {
+		getObservacions().remove(observacion);
+		observacion.setFenomenoUnidade(null);
+
+		return observacion;
 	}
 
 }

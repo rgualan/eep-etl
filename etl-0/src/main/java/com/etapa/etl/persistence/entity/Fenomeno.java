@@ -2,6 +2,7 @@ package com.etapa.etl.persistence.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.List;
 
 
 /**
@@ -14,7 +15,6 @@ public class Fenomeno implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="fen_id")
 	private String fenId;
 
@@ -26,6 +26,10 @@ public class Fenomeno implements Serializable {
 
 	@Column(name="fen_tipo")
 	private String fenTipo;
+
+	//bi-directional many-to-one association to FenomenoUnidade
+	@OneToMany(mappedBy="fenomeno")
+	private List<FenomenoUnidade> fenomenoUnidades;
 
 	public Fenomeno() {
 	}
@@ -60,6 +64,28 @@ public class Fenomeno implements Serializable {
 
 	public void setFenTipo(String fenTipo) {
 		this.fenTipo = fenTipo;
+	}
+
+	public List<FenomenoUnidade> getFenomenoUnidades() {
+		return this.fenomenoUnidades;
+	}
+
+	public void setFenomenoUnidades(List<FenomenoUnidade> fenomenoUnidades) {
+		this.fenomenoUnidades = fenomenoUnidades;
+	}
+
+	public FenomenoUnidade addFenomenoUnidade(FenomenoUnidade fenomenoUnidade) {
+		getFenomenoUnidades().add(fenomenoUnidade);
+		fenomenoUnidade.setFenomeno(this);
+
+		return fenomenoUnidade;
+	}
+
+	public FenomenoUnidade removeFenomenoUnidade(FenomenoUnidade fenomenoUnidade) {
+		getFenomenoUnidades().remove(fenomenoUnidade);
+		fenomenoUnidade.setFenomeno(null);
+
+		return fenomenoUnidade;
 	}
 
 }

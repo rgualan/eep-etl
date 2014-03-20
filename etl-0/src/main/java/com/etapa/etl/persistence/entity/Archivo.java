@@ -14,7 +14,6 @@ public class Archivo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="arc_path")
 	private String arcPath;
 
@@ -39,10 +38,5 @@ public class Archivo implements Serializable {
 	public void setArcNbytes(Long arcNbytes) {
 		this.arcNbytes = arcNbytes;
 	}
-	
-	@Override
-    public String toString() {
-        return "com.etapa.etl.persistence.entity.Archivo[ arcPath=" + arcPath + " ]";
-    }
 
 }

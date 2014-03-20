@@ -19,7 +19,7 @@ public class Observacion implements Serializable {
 	@Column(name="obs_valor")
 	private String obsValor;
 
-	//uni-directional many-to-one association to Estacion
+	//bi-directional many-to-one association to Estacion
 	@ManyToOne
 	@JoinColumns({
 		@JoinColumn(name="est_id", referencedColumnName="est_id"),
@@ -27,11 +27,11 @@ public class Observacion implements Serializable {
 		})
 	private Estacion estacion;
 
-	//uni-directional many-to-one association to FenomenoUnidade
+	//bi-directional many-to-one association to FenomenoUnidade
 	@ManyToOne
 	@JoinColumns({
-		@JoinColumn(name="fen_id", referencedColumnName="uni_id"),
-		@JoinColumn(name="uni_id", referencedColumnName="fen_id")
+		@JoinColumn(name="fen_id", referencedColumnName="fen_id"),
+		@JoinColumn(name="uni_id", referencedColumnName="uni_id")
 		})
 	private FenomenoUnidade fenomenoUnidade;
 
