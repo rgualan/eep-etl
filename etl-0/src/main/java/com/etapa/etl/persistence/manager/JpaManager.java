@@ -52,12 +52,12 @@ public class JpaManager {
 	// }
 
 	public static void beginTransaction() {
-		Log.getInstance().info("Begin transaction");
+	//	Log.getInstance().info("Begin transaction");
 		getEntityManager().getTransaction().begin();
 	}
 
 	public static void commitTransaction() {
-		Log.getInstance().info("Commit transaction");
+		//Log.getInstance().info("Commit transaction");
 		getEntityManager().getTransaction().commit();
 		getEntityManager().clear();
 	}

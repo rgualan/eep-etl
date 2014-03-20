@@ -201,17 +201,29 @@ public class DaoUtil {
 	}
 
 	public void ingresaArchivo(String campos[]) throws Exception {
-		Archivo newEntity = new Archivo();
+		Archivo newEntity = GeneralDao.find(Archivo.class, campos[0]);
+		if (newEntity==null){
+		newEntity = new Archivo();
 		newEntity.setArcPath(campos[0]);
 		newEntity.setArcNbytes(Long.valueOf(campos[1]));
 		GeneralDao.insert(newEntity);
+		}
+	}
+	
+	public void actualizaArchivo(String campos[]) throws Exception {
+		Archivo newEntity = GeneralDao.find(Archivo.class, campos[0]);
+		if (newEntity != null){
+			newEntity.setArcNbytes(Long.valueOf(campos[1]));
+			GeneralDao.update(newEntity);
+		}
+		
+		
+		
 	}
 
 	public TipoEstacion buscaoIngresaTipoEstacion(String campos[]) throws Exception {
 		// Buscar
-		TipoEstacion entity = TipoEstacionDao.queryByNombre(campos[0]); 
-		Log.getInstance().debug("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY>>>" + campos);
-		Log.getInstance().debug("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY>>>" + entity);
+		TipoEstacion entity = TipoEstacionDao.queryByNombre(campos[0]); 		
 		
 		if (entity == null) {
 			// Ingresar
@@ -230,15 +242,17 @@ public class DaoUtil {
 	// campos basicos est_id, tipo_id, toa,modelodatalog,codigotadalog, std,
 	// verionprog,num
 	{
-		Log.getInstance().info("ESTE R =" + campos[1]);
-
 		// Insertar
-		Estacion newEntity = new Estacion();
 		EstacionPK id = new EstacionPK();
 		id.setEstId(campos[0]);
 		id.setTipId(tip.getTipId());
+		
+		Estacion newEntity = GeneralDao.find(Estacion.class, id);
+		if (newEntity == null)
+		{
+		newEntity = new Estacion();		
 		newEntity.setTipoEstacion(tip);
-		Log.getInstance().info("ESTE DE AQUI" + id.getTipId());
+		//Log.getInstance().info("ESTE DE AQUI" + id.getTipId());
 		newEntity.setId(id);
 		newEntity.setEstToa(campos[2]);
 		newEntity.setEstModelodatalog(campos[3]);
@@ -246,9 +260,9 @@ public class DaoUtil {
 		newEntity.setEstStd(campos[5]);
 		newEntity.setEstVersionprog(campos[6]);
 		newEntity.setEstNum(campos[7]);
-
 		GeneralDao.insert(newEntity);
-
+		}
+		
 	}
 
 	public Fenomeno ingresaFenomeno(String campos[]) throws Exception {
@@ -293,13 +307,15 @@ public class DaoUtil {
 		// List<Unidade> uni = this.consultaUnidade(campos[1]);
 		Unidade uni = JpaManager.find(Unidade.class, campos[0]);
 		Fenomeno fen = JpaManager.find(Fenomeno.class, campos[1]);
-		System.out.println("LLENA FENOMENOOOOOOO"+ fen.getFenId() +" "+uni.getUniId());
-		
-
-		FenomenoUnidade newEntity = new FenomenoUnidade();
+		//System.out.println("LLENA FENOMENOOOOOOO"+ fen.getFenId() +" "+uni.getUniId());
 		FenomenoUnidadePK id = new FenomenoUnidadePK();
 		id.setFenId(fen.getFenId());
 		id.setUniId(uni.getUniId());
+		
+		FenomenoUnidade newEntity = GeneralDao.find(FenomenoUnidade.class, id);
+				if (newEntity==null)
+				{
+		 newEntity = new FenomenoUnidade();		
 		newEntity.setFenomeno(fen);
 		newEntity.setUnidade(uni);
 		newEntity.setId(id);
@@ -311,6 +327,7 @@ public class DaoUtil {
 		newEntity.setFeuAlturasensor(Double.valueOf(campos[4]));
 
 		GeneralDao.insert(newEntity);
+				}
 
 	}
 
@@ -327,23 +344,27 @@ public class DaoUtil {
 		estPk.setTipId(Integer.valueOf(campos[2]));
 		Estacion est = JpaManager.find(Estacion.class, estPk);
 
-		Observacion newEntity = new Observacion();
 		ObservacionPK id = new ObservacionPK();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date parsed = format.parse(campos[0]);
-        java.sql.Date sql = new java.sql.Date(parsed.getTime());
-        
+        java.sql.Date sql = new java.sql.Date(parsed.getTime());        
 		id.setObsFecha(sql);		
 		id.setEstId(est.getId().getEstId());
 		id.setTipId(est.getId().getTipId());
 		id.setUniId(fenuni.getId().getFenId());
 		id.setFenId(fenuni.getId().getUniId());		
+		
+		Observacion newEntity = GeneralDao.find(Observacion.class, id);
+		if (newEntity==null)
+				{
+		newEntity = new Observacion();				
 		newEntity.setId(id);
 		newEntity.setEstacion(est);
 		newEntity.setFenomenoUnidade(fenuni);
 		newEntity.setObsValor(campos[5]);
 
 		GeneralDao.insert(newEntity);
+				}
 
 	}
 
