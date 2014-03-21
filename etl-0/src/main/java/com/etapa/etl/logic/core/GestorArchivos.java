@@ -139,7 +139,7 @@ public class GestorArchivos implements Runnable {
 									fen_id[j-2] = campos[j]; // este va de ley
 									String[] nombre = campos[j].split("_");
 									String fennombre = nombre[0];
-									String fentipo = "";
+									String fentipo = nombre[0];;
 									if (nombre.length > 2)
 										fentipo = nombre[2];
 									else if (nombre.length > 1)
@@ -163,6 +163,8 @@ public class GestorArchivos implements Runnable {
 								String[] datoss = new String[4];
 								int j = 2;
 								while (j != campos.length) {
+									if (campos[j]==null || campos[j].equals(""))
+										campos[j]="unidad no definida";
 									uni_id[j-2] = campos[j];
 									datoss[0] = campos[j];
 									datoss[1] = campos[j];
