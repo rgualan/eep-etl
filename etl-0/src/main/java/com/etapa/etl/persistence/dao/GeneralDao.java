@@ -12,7 +12,7 @@ public class GeneralDao {
 	}
 
 	public static void insert(Object obj) throws Exception {
-		Log.getInstance().info("Insert entity: " + obj);
+	//	Log.getInstance().info("Insert entity: " + obj);
 
 		JpaManager.beginTransaction();
 		JpaManager.persist(obj);

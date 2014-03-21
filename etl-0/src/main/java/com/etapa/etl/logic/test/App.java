@@ -16,7 +16,7 @@ public class App {
 			JpaManagerFactory.createEntityManagerFactory();
 
 			// Vaciar datos
-			cleanTables();
+		//	cleanTables();
 
 			// Procesar
 			RecopilarDatos rd = new RecopilarDatos();

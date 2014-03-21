@@ -86,11 +86,14 @@ public class GestorArchivos implements Runnable {
 			try {
 				archivo = new RandomAccessFile(arch, "r");
 				if (!(archivo.length() == posini)) {
-					archivo.seek(posini); // la posicion del archivo
+					archivo.seek(0); // la posicion del archivo
 					String n = "";
 					while (n != null) {
 						// se lee un entero del fichero
-						n = archivo.readLine();
+					if (i==4 && posini>0)
+							archivo.seek(posini+2);					
+					n = archivo.readLine();
+					
 						if (n != null)
 						{
 
@@ -176,7 +179,7 @@ public class GestorArchivos implements Runnable {
 								}
 
 							}
-							if (i >= 4) {
+							if (i >= 4 ) {
 								int j = 2;
 								String fecha = campos[0]; // este va de ley
 								String[] datoss = null;
@@ -196,17 +199,27 @@ public class GestorArchivos implements Runnable {
 									j++;
 								}
 							}
-							i++;
-							 posfin = archivo.getFilePointer();
-							campos = new String[2];
-							campos[0] = arch;
-							campos[1]=String.valueOf(posfin);
-							daoUtil.actualizaArchivo(campos);
-							
+						
+							/* ÇVER SI ACTUALIZA LINEA POR LINEA O TODO DE GOLPE
+							 * MAYOR SGURIDAD AQUI 
+							 * MAYOR EFICIENCIA ABAJO
+							 * posfin = archivo.getFilePointer();
+								campos = new String[2];
+								campos[0] = arch;
+								campos[1]=String.valueOf(posfin);
+								daoUtil.actualizaArchivo(campos);
+							*/
 						}
+						i++;
 						
 					//		
 					}
+					posfin = archivo.length();
+					campos = new String[2];
+					campos[0] = arch;
+					campos[1]=String.valueOf(posfin);
+					daoUtil.actualizaArchivo(campos);
+					System.out.println("LA POSICION FINAL DEL ARCHIVO "+arch +" ES DE "+posfin+" bytes");
 					
 				}
 
@@ -214,6 +227,7 @@ public class GestorArchivos implements Runnable {
 				// TODO Auto-generated catch block
 				Log.getInstance().info("NO SE ENCONTRO EL ARCHIVO");
 				Log.getInstance().error(e);
+				e.printStackTrace();
 			} finally {
 				try {
 					archivo.close();

@@ -354,17 +354,17 @@ public class DaoUtil {
 		id.setUniId(fenuni.getId().getFenId());
 		id.setFenId(fenuni.getId().getUniId());		
 		
-		Observacion newEntity = GeneralDao.find(Observacion.class, id);
-		if (newEntity==null)
-				{
-		newEntity = new Observacion();				
+	//	Observacion newEntity = GeneralDao.find(Observacion.class, id);
+	//	if (newEntity==null)
+	//			{
+		Observacion newEntity = new Observacion();				
 		newEntity.setId(id);
 		newEntity.setEstacion(est);
 		newEntity.setFenomenoUnidade(fenuni);
 		newEntity.setObsValor(campos[5]);
 
 		GeneralDao.insert(newEntity);
-				}
+		//		}
 
 	}
 
