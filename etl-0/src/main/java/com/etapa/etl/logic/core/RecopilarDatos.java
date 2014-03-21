@@ -35,7 +35,9 @@ public class RecopilarDatos {
 
 		// Procesamiento
 		if (archivos != null) {
-			ExecutorService exe = Executors.newSingleThreadScheduledExecutor();
+		//	ExecutorService exe = Executors.newSingleThreadScheduledExecutor();
+			ExecutorService exe = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+
 			for (String archivo : archivos) {
 
 				if (archivo.contains(extensiones)
@@ -52,7 +54,7 @@ public class RecopilarDatos {
 					long pos = 0;
 					try {
 						Archivo arc = per.consultaArchivo(path + "/" + archivo);
-						pos = arc.getArcNbytes();
+						pos = (long) arc.getArcNbytes();
 
 						// pos=cargarpos(path+"/"+archivo);
 					} catch (Exception e) {

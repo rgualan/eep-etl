@@ -16,18 +16,18 @@ public class App {
 			JpaManagerFactory.createEntityManagerFactory();
 
 			// Vaciar datos
-		//	cleanTables();
+			cleanTables();
 
 			// Procesar
 			RecopilarDatos rd = new RecopilarDatos();
-			rd.leerdatos();
+		rd.leerdatos();
 
 		} catch (Exception e) {
 			Log.getInstance().error(e);
 			JpaManager.rollbackTransaction();
 		} finally {
 			// Persistence.close();
-			JpaManagerFactory.close();
+		JpaManagerFactory.close();
 		}
 
 	}
