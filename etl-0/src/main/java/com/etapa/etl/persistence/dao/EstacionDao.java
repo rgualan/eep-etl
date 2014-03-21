@@ -8,7 +8,7 @@ import com.etapa.etl.persistence.manager.JpaManager;
 
 public class EstacionDao extends GeneralDao {
 
-	public static Estacion queryjoinById(String estacionId, int tipoestacionId) {
+	public static Estacion queryjoinById(String estacionId, String tipoestacionId) {
 		EstacionPK id = new EstacionPK();
 		id.setEstId(estacionId);
 		id.setTipId(tipoestacionId);

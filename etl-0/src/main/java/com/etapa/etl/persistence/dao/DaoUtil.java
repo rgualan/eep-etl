@@ -85,7 +85,7 @@ public class DaoUtil {
 		return tmpArc;
 	}
 
-	public Estacion consultaEstacion(String estid, int tipoid) throws Exception {
+	public Estacion consultaEstacion(String estid, String tipoid) throws Exception {
 		// List<Estacion> resultList = null;
 		// EstacionDao dao = new EstacionDao(em);
 		// if (estid.equals("")) {
@@ -190,7 +190,7 @@ public class DaoUtil {
 													// parsing de fecha no
 													// deprecado
 		pk.setEstId(estid);
-		pk.setTipId(Integer.parseInt(tipid));
+		pk.setTipId(tipid);
 		pk.setUniId(uniid);
 		pk.setFenId(fenid);
 
@@ -223,13 +223,13 @@ public class DaoUtil {
 
 	public TipoEstacion buscaoIngresaTipoEstacion(String campos[]) throws Exception {
 		// Buscar
-		TipoEstacion entity = TipoEstacionDao.queryByNombre(campos[0]); 		
+		TipoEstacion entity = GeneralDao.find(TipoEstacion.class, campos[0]);	
 		
 		if (entity == null) {
 			// Ingresar
 
 			entity = new TipoEstacion();
-			entity.setTipNombre(campos[0]);
+			entity.setTipId(campos[0]);
 			entity.setTipDescripcion(campos[1]);
 			GeneralDao.insert(entity);
 		}
@@ -341,7 +341,7 @@ public class DaoUtil {
 
 		EstacionPK estPk = new EstacionPK();
 		estPk.setEstId(campos[1]);
-		estPk.setTipId(Integer.valueOf(campos[2]));
+		estPk.setTipId(campos[2]);
 		Estacion est = JpaManager.find(Estacion.class, estPk);
 
 		ObservacionPK id = new ObservacionPK();

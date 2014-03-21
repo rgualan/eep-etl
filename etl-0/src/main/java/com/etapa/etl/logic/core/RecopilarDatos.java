@@ -35,8 +35,8 @@ public class RecopilarDatos {
 
 		// Procesamiento
 		if (archivos != null) {
-		//	ExecutorService exe = Executors.newSingleThreadScheduledExecutor();
-			ExecutorService exe = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+			ExecutorService exe = Executors.newSingleThreadScheduledExecutor();
+		//	ExecutorService exe = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
 			for (String archivo : archivos) {
 

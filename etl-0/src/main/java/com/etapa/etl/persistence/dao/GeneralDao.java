@@ -13,11 +13,14 @@ public class GeneralDao {
 
 	public static void insert(Object obj) throws Exception {
 	//	Log.getInstance().info("Insert entity: " + obj);
-
+try
+{
 		JpaManager.beginTransaction();
 		JpaManager.persist(obj);
 		JpaManager.commitTransaction();
-
+}
+catch(Exception e)
+{}
 	}
 
 	public static void update(Object obj) throws Exception {

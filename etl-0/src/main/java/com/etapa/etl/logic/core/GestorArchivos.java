@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import com.etapa.etl.persistence.dao.DaoUtil;
 import com.etapa.etl.persistence.entity.TipoEstacion;
@@ -15,7 +18,7 @@ public class GestorArchivos implements Runnable {
 	String arch;
 	String separador;
 	DaoUtil daoUtil;
-
+	private static final long LIMITE = 100000000;
 	public GestorArchivos(Long posini, String arch, String separador) {
 		this.posini = posini;
 		this.arch = arch;
@@ -78,12 +81,13 @@ public class GestorArchivos implements Runnable {
 			Log.getInstance().info("INTENTA LLENAR LA BD");
 			String[] campos;			
 			String est_id = null;
-			int tip_id = 0;
+			String tip_id = null;
 			String[] fen_id = null;
 			String[] uni_id = null;			
 			int i = 0;			
 			//////*******///////			
 			try {
+				ExecutorService exe = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 				archivo = new RandomAccessFile(arch, "r");
 				if (!(archivo.length() == posini)) {
 					archivo.seek(0); // la posicion del archivo
@@ -194,7 +198,9 @@ public class GestorArchivos implements Runnable {
 									datoss[5] = obs_valor;
 									// guardaobservacion(est_id,tip_id,uni_id,fen_id,obs_valor,0);
 									// //0 indica q es el dato crudo
-									daoUtil.ingresaObservacion(datoss);
+									
+									exe.execute(new ingresaObservacion(datoss));
+									//daoUtil.ingresaObservacion(datoss);
 
 									j++;
 								}
@@ -213,6 +219,13 @@ public class GestorArchivos implements Runnable {
 						i++;
 						
 					//		
+					}
+					
+					exe.shutdown();
+					try {
+						exe.awaitTermination(LIMITE, TimeUnit.MINUTES);
+					} catch (InterruptedException e) {
+						Log.getInstance().error(e);
 					}
 					posfin = archivo.length();
 					campos = new String[2];
