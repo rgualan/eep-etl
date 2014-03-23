@@ -1,14 +1,10 @@
 package com.etapa.etl.persistence.manager;
 
-import java.util.Date;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import org.apache.log4j.Logger;
-
-import com.etapa.etl.util.FormatDates;
+import com.etapa.etl.util.Chronometer;
 import com.etapa.etl.util.Log;
 
 public final class JpaManagerFactory {
@@ -19,11 +15,9 @@ public final class JpaManagerFactory {
 
 	private final static String PERSISTENCE_UNIT = "etl";
 
-	private final static Logger log = Log.getInstance();
+	// private final static Logger log = Log.getInstance();
 
 	private JpaManagerFactory() {
-		// Avoid creating the entity manager here, because the close method
-		// problem
 	}
 
 	public static void createEntityManagerFactory() {
@@ -32,17 +26,16 @@ public final class JpaManagerFactory {
 
 	public static void createEntityManagerFactory(final String persistenceUnit) {
 		Log.getInstance().info("Initialize persistence");
-		Long start = System.currentTimeMillis(); // Start
+
+		Chronometer.startTimer("persistence");
+
 		getInstance().emf = Persistence
 				.createEntityManagerFactory(persistenceUnit);
-		Log.getInstance().info("Load time for persistence: "
-				+ FormatDates.getMinuteFormat().format(
-						new Date(System.currentTimeMillis() - start)));
+
+		Chronometer.stopTimer("persistence", "Load time for persistence: ");
 
 	}
 
-	// Creador sincronizado para protegerse de posibles problemas multi-hilo
-	// otra prueba para evitar instanciación múltiple
 	private synchronized static void createInstance() {
 		if (INSTANCE == null) {
 			INSTANCE = new JpaManagerFactory();

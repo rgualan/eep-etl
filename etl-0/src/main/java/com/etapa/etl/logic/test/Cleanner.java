@@ -1,28 +1,15 @@
 package com.etapa.etl.logic.test;
 
-import com.etapa.etl.logic.core.LoggerNetScanner;
-import com.etapa.etl.persistence.dao.GeneralDao;
-import com.etapa.etl.persistence.entity.Unidade;
 import com.etapa.etl.persistence.manager.JpaManager;
 import com.etapa.etl.persistence.manager.JpaManagerFactory;
 import com.etapa.etl.util.Log;
 
-public class App {
-
-	public static void main(String[] args) throws Exception {
-
+public class Cleanner {
+	public static void main(String[] args) {
 		try {
-			// Persistence.createEntityManager();
 			JpaManagerFactory.createEntityManagerFactory();
 
-			// Vaciar datos
 			cleanTables();
-			
-			// Insertar parametros generales
-			parameterize();
-
-			// Procesar/Escanear archivos
-			LoggerNetScanner.scan();
 
 		} catch (RuntimeException re) {
 			Log.getInstance().error(re);
@@ -32,16 +19,6 @@ public class App {
 		} finally {
 			JpaManagerFactory.close();
 		}
-	}
-
-	private static void parameterize() throws Exception {
-		Unidade uni = new Unidade();
-		uni.setUniId("NA");
-		uni.setUniNombre("NA");
-		uni.setUniDescripcion("NA");
-		uni.setUniTipo("NA");
-		
-		GeneralDao.insert(uni);
 	}
 
 	private static void cleanTables() {
@@ -64,4 +41,5 @@ public class App {
 				.createNativeQuery("DELETE FROM TIPO_ESTACION").executeUpdate();
 		JpaManager.commitTransaction();
 	}
+
 }

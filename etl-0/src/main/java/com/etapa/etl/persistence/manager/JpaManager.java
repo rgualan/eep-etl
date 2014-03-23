@@ -40,17 +40,6 @@ public class JpaManager {
 		return INSTANCE;
 	}
 
-	// public synchronized static boolean isBusy() {
-	// // if(getInstance().em == null || (getInstance().em != null &&
-	// // !getInstance().em.isOpen())){
-	// if (getInstance().em == null
-	// || (getInstance().em != null && !getInstance().em.get()
-	// .isOpen())) {
-	// return false;
-	// }
-	// return true;
-	// }
-
 	public static void beginTransaction() {
 	//	Log.getInstance().info("Begin transaction");
 		getEntityManager().getTransaction().begin();
@@ -85,14 +74,6 @@ public class JpaManager {
 		}
 	}
 
-	/**
-	 * @see javax.persistence.EntityManager.persist
-	 * 
-	 * @param entity
-	 *            entity to persist
-	 * @return
-	 * @throws Exception
-	 */
 	public static Object persist(Object entity) throws Exception {
 		// Persist
 		getEntityManager().persist(entity);
@@ -100,14 +81,6 @@ public class JpaManager {
 		return entity;
 	}
 
-	/**
-	 * Removes a detached entity
-	 * 
-	 * @param entity
-	 *            entity for removing
-	 * @throws Exception
-	 */
-	// public static void delete(Entity entity) throws Exception {
 	public static void delete(Object entity) {
 		// Merge
 		entity = getEntityManager().merge(entity);
@@ -115,36 +88,14 @@ public class JpaManager {
 		getEntityManager().remove(entity);
 	}
 
-	/**
-	 * Obtiene una referencia a una entidad dada la clase de la entidad y su Pk.
-	 * Se utiliza optimistic locking si la entidad tiene el campo version
-	 * 
-	 * @param type
-	 *            Clase de la Entidad
-	 * @param pk
-	 *            Clave primaria
-	 * @return Una referencia a la Entidad encontrada o null si no existe
-	 * @throws Exception
-	 */
 	public static <T> T find(Class<T> type, Object pk) throws Exception {
 		return find(type, pk, true);
 	}
 
 	public static <T> T find(Class<T> type, Object pk, boolean detachEntity)
 			throws Exception {
-		T entity;
+		T entity = getEntityManager().find(type, pk);
 
-		// // Apply locking, if the entity implements OptimistickLocking
-		// interface
-		// if (implementsInterface(type, OptimisticLocking.class)) {
-		// entity = getEntityManager().find(type, pk, LockModeType.OPTIMISTIC);
-		// } else {
-		// entity = getEntityManager().find(type, pk);
-		// }
-
-		entity = getEntityManager().find(type, pk);
-
-		// Detach from context
 		if (detachEntity && entity != null) {
 			getEntityManager().detach(entity);
 		}
@@ -152,13 +103,6 @@ public class JpaManager {
 		return entity;
 	}
 
-	/**
-	 * Actualiza (merge) una entidad que fue aislada (detach) previamente del
-	 * contexto actual.
-	 * 
-	 * @param entity
-	 *            Entidad
-	 */
 	public static Object update(Object entity) throws Exception {
 		return getEntityManager().merge(entity);
 	}

@@ -12,15 +12,20 @@ public class GeneralDao {
 	}
 
 	public static void insert(Object obj) throws Exception {
-	//	Log.getInstance().info("Insert entity: " + obj);
-try
-{
+		// Log.getInstance().info("Insert entity: " + obj);
 		JpaManager.beginTransaction();
 		JpaManager.persist(obj);
 		JpaManager.commitTransaction();
-}
-catch(Exception e)
-{}
+	}
+
+	public static void secureInsert(Object obj, Object pk) throws Exception {
+		// Log.getInstance().info("Insert secure entity: " + obj);
+
+		if (JpaManager.find(obj.getClass(), pk) == null) {
+			JpaManager.beginTransaction();
+			JpaManager.persist(obj);
+			JpaManager.commitTransaction();
+		}
 	}
 
 	public static void update(Object obj) throws Exception {
