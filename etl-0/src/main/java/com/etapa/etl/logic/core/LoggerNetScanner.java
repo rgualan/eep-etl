@@ -12,6 +12,11 @@ import com.etapa.etl.util.Chronometer;
 import com.etapa.etl.util.ConfigUtil;
 import com.etapa.etl.util.Log;
 
+/**
+ * 
+ * Engloba el proceso de escaneo de un repositorio de datos de loggernet
+ *
+ */
 public class LoggerNetScanner {
 
 	private static String path;

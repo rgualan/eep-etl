@@ -4,6 +4,11 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * 
+ * Responsable de las operaciones a nivel de repositorio
+ *
+ */
 public class RepositoryManager {
 
 	public static List<String> getListOfFilesToProcess(String path) throws Exception {

@@ -4,6 +4,12 @@ import com.etapa.etl.persistence.entity.Estacion;
 import com.etapa.etl.persistence.entity.EstacionPK;
 import com.etapa.etl.persistence.entity.TipoEstacion;
 
+/**
+ * 
+ * Representa la parte del encabezado que contiene informacion sobre la estacion
+ * correspondiente
+ * 
+ */
 public class StationHeader {
 	String toa;
 	String name;

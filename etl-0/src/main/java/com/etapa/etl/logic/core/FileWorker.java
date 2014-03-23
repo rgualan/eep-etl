@@ -29,6 +29,11 @@ import com.etapa.etl.util.Chronometer;
 import com.etapa.etl.util.FormatDates;
 import com.etapa.etl.util.Log;
 
+/**
+ * 
+ * Se encarga de procesar un archivo de datos
+ *  
+ */
 public class FileWorker implements Runnable {
 	private Archivo fileEntity;
 	private String separador;

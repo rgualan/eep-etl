@@ -6,6 +6,11 @@ import com.etapa.etl.persistence.entity.FenomenoUnidade;
 import com.etapa.etl.persistence.entity.FenomenoUnidadePK;
 import com.etapa.etl.persistence.entity.Unidade;
 
+/**
+ * 
+ * Representa una columna individual de los ficheros de loggernet
+ * 
+ */
 public class ColumnHeader {
 	private int index;
 	private String name;
@@ -66,7 +71,7 @@ public class ColumnHeader {
 			fen.setFenId(fenomenoId);
 			fen.setFenNombre(fenomenoId);
 			fen.setFenTipo(fenSta);
-			
+
 		} else if (parts.length == 3) {
 			String fenId = parts[0];
 			String fenSta = parts[2];
