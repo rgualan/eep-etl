@@ -115,6 +115,11 @@ public class FileWorker implements Runnable {
 
 					i++;
 				}
+				
+				if (buffer.size() > 0) {
+					localExecutor.execute(new BatchInserter(buffer));
+					buffer = null;
+				}
 
 				localExecutor.shutdown();
 				localExecutor.awaitTermination(LoggerNetScanner.LIMITE,
