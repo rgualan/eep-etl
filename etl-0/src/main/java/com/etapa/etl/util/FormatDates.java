@@ -26,14 +26,13 @@ public final class FormatDates {
 			Format.FILE);
 
 	private FormatDates() {
-		Log.getInstance().info("Create instace of Formatter class");
 	}
 
 	public static SimpleDateFormat getDateFormat() {
 		return formatDate;
 	}
 
-	public static SimpleDateFormat getTimeFormat() {
+	public static synchronized SimpleDateFormat getTimeFormat() {
 		return formatTime;
 	}
 

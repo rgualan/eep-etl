@@ -15,7 +15,7 @@ import com.etapa.etl.util.Log;
 /**
  * 
  * Engloba el proceso de escaneo de un repositorio de datos de loggernet
- *
+ * 
  */
 public class LoggerNetScanner {
 
@@ -36,9 +36,10 @@ public class LoggerNetScanner {
 
 		// Procesamiento
 		if (archivos != null && archivos.size() > 0) {
-			ExecutorService exe = Executors.newSingleThreadScheduledExecutor();
 			// ExecutorService exe =
-			// Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+			// Executors.newSingleThreadScheduledExecutor();
+			ExecutorService exe = Executors.newFixedThreadPool(Runtime
+					.getRuntime().availableProcessors());
 
 			for (String archivo : archivos) {
 

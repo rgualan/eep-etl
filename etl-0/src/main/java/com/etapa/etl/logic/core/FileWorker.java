@@ -6,12 +6,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import com.etapa.etl.logic.core.data.ColumnHeader;
 import com.etapa.etl.logic.core.data.FileHeader;
@@ -26,20 +25,25 @@ import com.etapa.etl.persistence.entity.ObservacionPK;
 import com.etapa.etl.persistence.entity.TipoEstacion;
 import com.etapa.etl.persistence.entity.Unidade;
 import com.etapa.etl.util.Chronometer;
-import com.etapa.etl.util.FormatDates;
+import com.etapa.etl.util.Format;
 import com.etapa.etl.util.Log;
 
 /**
  * 
  * Se encarga de procesar un archivo de datos
- *  
+ * 
  */
 public class FileWorker implements Runnable {
+
 	private Archivo fileEntity;
 	private String separador;
-	
+
 	private static final long LIMITE = 100000000;
 	private static final int HEADER_SIZE = 4;
+	private static final int RECORD_BUFFER_SIZE = 1000;
+
+	// Tool
+	private SimpleDateFormat formatTime = new SimpleDateFormat(Format.TIME);
 
 	public FileWorker(Archivo fileEntity, String separador) {
 		this.fileEntity = fileEntity;
@@ -51,8 +55,8 @@ public class FileWorker implements Runnable {
 		Log.getInstance().info(
 				"Posicion inicial: " + fileEntity.getLastPosition());
 
-		ExecutorService executor = Executors.newFixedThreadPool(Runtime
-				.getRuntime().availableProcessors());
+		// ExecutorService executor = Executors.newFixedThreadPool(Runtime
+		// .getRuntime().availableProcessors());
 
 		RandomAccessFile archivo = null;
 
@@ -102,15 +106,16 @@ public class FileWorker implements Runnable {
 
 					i++;
 				}
-				
-				Log.getInstance().info("Numero de registros procesados: " + (i - HEADER_SIZE));
 
-				executor.shutdown();
-				try {
-					executor.awaitTermination(LIMITE, TimeUnit.MINUTES);
-				} catch (InterruptedException e) {
-					Log.getInstance().error(e);
-				}
+				Log.getInstance().info(
+						"Numero de registros procesados: " + (i - HEADER_SIZE));
+
+				// executor.shutdown();
+				// try {
+				// executor.awaitTermination(LIMITE, TimeUnit.MINUTES);
+				// } catch (InterruptedException e) {
+				// Log.getInstance().error(e);
+				// }
 
 				// Guardar posicion final
 				long posfin = archivo.length();
@@ -142,18 +147,32 @@ public class FileWorker implements Runnable {
 	private void saveRecord(FileHeader header, String[] campos)
 			throws Exception {
 		String dateStr = campos[0];
-		Date date = FormatDates.getTimeFormat().parse(dateStr);
+		Date date = null;
+		// Date date = FormatDates.getTimeFormat().parse(dateStr);
+
+		try {
+			date = formatTime.parse(dateStr);
+			// date = FormatDates.getTimeFormat().parse(dateStr);
+		} catch (Exception e) {
+			Log.getInstance().debug("CAMPOS>>>" + Arrays.toString(campos));
+			Log.getInstance().debug("CAMPO0>>>" + campos[0]);
+			Log.getInstance().debug("DATESTR>>>" + dateStr);
+			e.printStackTrace();
+		}
 
 		Estacion estacion = header.getStation().parseEstacion();
 
+		List<Observacion> buffer = new ArrayList<Observacion>(
+				RECORD_BUFFER_SIZE);
+
 		for (ColumnHeader column : header.getFenomenonColumns()) {
-			//Log.getInstance().debug("COLUMN>>>" + column.getName());
-			
+			// Log.getInstance().debug("COLUMN>>>" + column.getName());
+
 			FenomenoUnidade fenUni = column.parseFenomenoUnidade();
 
-			//Log.getInstance().debug("FENUNI>>>" + fenUni.getId().getFenId());
-			//Log.getInstance().debug("FENUNI>>>" + fenUni.getId().getUniId());
-			
+			// Log.getInstance().debug("FENUNI>>>" + fenUni.getId().getFenId());
+			// Log.getInstance().debug("FENUNI>>>" + fenUni.getId().getUniId());
+
 			Observacion ob = new Observacion();
 			ObservacionPK pk = new ObservacionPK();
 			pk.setObsFecha(date);
@@ -167,7 +186,17 @@ public class FileWorker implements Runnable {
 			ob.setEstacion(estacion);
 			ob.setFenomenoUnidade(fenUni);
 
-			GeneralDao.insert(ob);
+			// GeneralDao.insert(ob);
+
+			if (buffer.size() < RECORD_BUFFER_SIZE) {
+				buffer.add(ob);
+			} else {
+				GeneralDao.bulkInsert(buffer);
+				buffer = new ArrayList<Observacion>(RECORD_BUFFER_SIZE);
+			}
+		}
+		if (buffer.size() > 0) {
+			GeneralDao.bulkInsert(buffer);
 		}
 	}
 

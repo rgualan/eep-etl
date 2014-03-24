@@ -3,7 +3,6 @@ package com.etapa.etl.persistence.dao;
 import java.util.List;
 
 import com.etapa.etl.persistence.manager.JpaManager;
-import com.etapa.etl.util.Log;
 
 public class GeneralDao {
 
@@ -29,7 +28,7 @@ public class GeneralDao {
 	}
 
 	public static void update(Object obj) throws Exception {
-		Log.getInstance().info("Update entity: " + obj);
+		//Log.getInstance().info("Update entity: " + obj);
 
 		JpaManager.beginTransaction();
 		JpaManager.update(obj);
@@ -37,7 +36,7 @@ public class GeneralDao {
 	}
 
 	public static void delete(Object obj) throws Exception {
-		Log.getInstance().info("Delete entity: " + obj);
+		//Log.getInstance().info("Delete entity: " + obj);
 
 		JpaManager.beginTransaction();
 		JpaManager.delete(obj);
@@ -50,5 +49,15 @@ public class GeneralDao {
 
 	public static <T> List<T> queryAll(Class<T> entityClass) {
 		return JpaManager.queryAll(entityClass);
+	}
+	
+	public static void bulkInsert(List<? extends Object> list) throws Exception{
+		JpaManager.beginTransaction();
+		
+		for (Object object : list) {
+			JpaManager.persist(object);
+		}
+		
+		JpaManager.commitTransaction();
 	}
 }

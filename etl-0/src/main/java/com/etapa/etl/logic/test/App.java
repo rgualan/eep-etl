@@ -5,6 +5,7 @@ import com.etapa.etl.persistence.dao.GeneralDao;
 import com.etapa.etl.persistence.entity.Unidade;
 import com.etapa.etl.persistence.manager.JpaManager;
 import com.etapa.etl.persistence.manager.JpaManagerFactory;
+import com.etapa.etl.util.FormatDates;
 import com.etapa.etl.util.Log;
 
 public class App {
@@ -12,7 +13,6 @@ public class App {
 	public static void main(String[] args) throws Exception {
 
 		try {
-			// Persistence.createEntityManager();
 			JpaManagerFactory.createEntityManagerFactory();
 
 			// Vaciar datos
