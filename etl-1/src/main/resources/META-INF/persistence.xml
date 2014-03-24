@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0"
+	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="etl" transaction-type="RESOURCE_LOCAL">
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		<class>com.etapa.etl.persistence.entity.Archivo</class>
+		<class>com.etapa.etl.persistence.entity.Estacion</class>
+		<class>com.etapa.etl.persistence.entity.EstacionPK</class>
+		<class>com.etapa.etl.persistence.entity.Fenomeno</class>
+		<class>com.etapa.etl.persistence.entity.FenomenoUnidade</class>
+		<class>com.etapa.etl.persistence.entity.FenomenoUnidadePK</class>
+		<class>com.etapa.etl.persistence.entity.Observacion</class>
+		<class>com.etapa.etl.persistence.entity.ObservacionPK</class>
+		<class>com.etapa.etl.persistence.entity.TipoEstacion</class>
+		<class>com.etapa.etl.persistence.entity.Unidade</class>
+		<!-- <shared-cache-mode>NONE</shared-cache-mode> -->
+		<properties>
+			<!-- Postgres -->
+			<property name="javax.persistence.target-database" value="PostgreSQL" />
+			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://127.0.0.1:5432/etapa" />
+			<property name="javax.persistence.jdbc.user" value="postgres" />
+			<property name="javax.persistence.jdbc.password" value="power123" />
+
+			<!-- DDL generation -->
+			<property name="eclipselink.ddl-generation" value="none" />
+			<!-- <property name="eclipselink.ddl-generation.output-mode" value="database"/> -->
+
+			<!--Logging -->
+			<property name="eclipselink.logging.level" value="OFF" />
+			<!-- <property name="eclipselink.logging.timestamp" value="true" /> -->
+			<!-- <property name="eclipselink.logging.session" value="true" /> -->
+			<!-- <property name="eclipselink.logging.thread" value="true" /> -->
+			<!-- <property name="eclipselink.logging.connection" value="true" /> -->
+			<!-- <property name="eclipselink.logging.exceptions" value="true" /> -->
+			<!-- <property name="eclipselink.logging.file" value="persistence.log" 
+				/> -->
+
+			<!-- Optimizations -->
+			<property name="eclipselink.jdbc.batch-writing" value="JDBC" />
+			<property name="eclipselink.jdbc.batch-writing.size" value="1000" />
+			<property name="eclipselink.cache.shared.default" value="true" />
+			<property name="eclipselink.jdbc.cache-statements" value="true" />
+		</properties>
+	</persistence-unit>
+</persistence>

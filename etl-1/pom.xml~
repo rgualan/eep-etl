@@ -1,0 +1,131 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.etapa</groupId>
+	<artifactId>etl</artifactId>
+	<packaging>jar</packaging>
+	<version>1.0</version>
+	<name>ETAPA ETL - ESTACIONES A TIEMPO REAL</name>
+	<url>http://www.etapa.net.ec/</url>
+	<properties>
+		<jdk.version>1.6</jdk.version>
+
+		<zk.version>6.5.2</zk.version>
+		<spring.version>3.1.2.RELEASE</spring.version>
+		<hibernate.version>4.0.0.Final</hibernate.version>
+		<commons-io>1.3.1</commons-io>
+		<maven.build.timestamp.format>yyyy-MM-dd
+		</maven.build.timestamp.format>
+		<packname>${project.artifactId}-${project.version}-FL-${maven.build.timestamp}
+		</packname>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<eclipselink.version>2.4.0</eclipselink.version>
+		<mysqlconnectorjava.version>5.1.22</mysqlconnectorjava.version>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>EclipseLink</id>
+			<url>http://download.eclipse.org/rt/eclipselink/maven.repo</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<!-- Global dependencies -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+		</dependency>
+
+		<!-- persistence -->
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>javax.persistence</artifactId>
+			<version>2.0.4.v201112161009</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>eclipselink</artifactId>
+			<version>${eclipselink.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysqlconnectorjava.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.1-901-1.jdbc4</version>
+		</dependency>
+
+
+		<!-- logic -->
+		<dependency>
+			<groupId>net.sf.supercsv</groupId>
+			<artifactId>super-csv</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>com.etapa.etl.logic.test.App</mainClass>
+							<classpathPrefix>dependency-jars/</classpathPrefix>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.5.1</version>
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<id>copy-dependencies</id> -->
+<!-- 						<phase>package</phase> -->
+<!-- 						<goals> -->
+<!-- 							<goal>copy-dependencies</goal> -->
+<!-- 						</goals> -->
+<!-- 						<configuration> -->
+<!-- 							<includeGroupIds>*</includeGroupIds> -->
+<!-- 							<outputDirectory>${project.build.directory}/dependency-jars/ -->
+<!-- 							</outputDirectory> -->
+<!-- 						</configuration> -->
+<!-- 					</execution> -->
+<!-- 				</executions> -->
+			</plugin>
+		</plugins>
+	</build>
+</project>
