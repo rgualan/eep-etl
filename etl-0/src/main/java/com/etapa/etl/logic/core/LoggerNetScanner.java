@@ -10,7 +10,6 @@ import com.etapa.etl.persistence.dao.GeneralDao;
 import com.etapa.etl.persistence.entity.Archivo;
 import com.etapa.etl.util.Chronometer;
 import com.etapa.etl.util.ConfigUtil;
-import com.etapa.etl.util.Log;
 
 /**
  * 
@@ -24,7 +23,7 @@ public class LoggerNetScanner {
 	private static String separador;
 	private static boolean leebackups;
 
-	private static final long LIMITE = 100000000;
+	public static final long LIMITE = 1000;
 
 	public static void scan() throws Exception {
 		Chronometer.startTimer("dataLoader");
@@ -36,10 +35,9 @@ public class LoggerNetScanner {
 
 		// Procesamiento
 		if (archivos != null && archivos.size() > 0) {
-			// ExecutorService exe =
-			// Executors.newSingleThreadScheduledExecutor();
-			ExecutorService exe = Executors.newFixedThreadPool(Runtime
-					.getRuntime().availableProcessors());
+			ExecutorService exe = Executors.newSingleThreadScheduledExecutor();
+			// ExecutorService exe = Executors.newFixedThreadPool(Runtime
+			// .getRuntime().availableProcessors());
 
 			for (String archivo : archivos) {
 
@@ -62,11 +60,7 @@ public class LoggerNetScanner {
 			}
 
 			exe.shutdown();
-			try {
-				exe.awaitTermination(LIMITE, TimeUnit.MINUTES);
-			} catch (InterruptedException e) {
-				Log.getInstance().error(e);
-			}
+			exe.awaitTermination(LIMITE, TimeUnit.MINUTES);
 		} else {
 			throw new Exception("No hay archivos en el directorio especificado");
 		}

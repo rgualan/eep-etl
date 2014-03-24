@@ -8,9 +8,11 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import com.etapa.etl.logic.core.data.ColumnHeader;
 import com.etapa.etl.logic.core.data.FileHeader;
@@ -38,7 +40,6 @@ public class FileWorker implements Runnable {
 	private Archivo fileEntity;
 	private String separador;
 
-	private static final long LIMITE = 100000000;
 	private static final int HEADER_SIZE = 4;
 	private static final int RECORD_BUFFER_SIZE = 1000;
 
@@ -55,8 +56,8 @@ public class FileWorker implements Runnable {
 		Log.getInstance().info(
 				"Posicion inicial: " + fileEntity.getLastPosition());
 
-		// ExecutorService executor = Executors.newFixedThreadPool(Runtime
-		// .getRuntime().availableProcessors());
+		ExecutorService localExecutor = Executors.newFixedThreadPool(Runtime
+				.getRuntime().availableProcessors());
 
 		RandomAccessFile archivo = null;
 
@@ -89,6 +90,8 @@ public class FileWorker implements Runnable {
 
 				String line = "";
 				int i = 0;
+				List<Observacion> buffer = new ArrayList<Observacion>(
+						RECORD_BUFFER_SIZE);
 
 				while ((line = archivo.readLine()) != null) {
 
@@ -96,26 +99,29 @@ public class FileWorker implements Runnable {
 					String[] campos = line.split(separador);
 
 					if (i >= HEADER_SIZE) {
-						saveRecord(header, campos);
-					}
 
-					/*
-					 * ÇVER SI ACTUALIZA LINEA POR LINEA O TODO DE GOLPE MAYOR
-					 * SGURIDAD AQUI MAYOR EFICIENCIA ABAJO posfin =
-					 */
+						List<Observacion> list = parseRecords(header, campos);
+						buffer.addAll(list);
+
+						if (buffer.size() >= RECORD_BUFFER_SIZE) {
+//							Log.getInstance().debug(
+//									"Envio de insercion en lote: "
+//											+ buffer.size() + " registros");
+							localExecutor.execute(new BatchInserter(buffer));
+							buffer = new ArrayList<Observacion>(
+									RECORD_BUFFER_SIZE);
+						}
+					}
 
 					i++;
 				}
 
+				localExecutor.shutdown();
+				localExecutor.awaitTermination(LoggerNetScanner.LIMITE,
+						TimeUnit.MINUTES);
+
 				Log.getInstance().info(
 						"Numero de registros procesados: " + (i - HEADER_SIZE));
-
-				// executor.shutdown();
-				// try {
-				// executor.awaitTermination(LIMITE, TimeUnit.MINUTES);
-				// } catch (InterruptedException e) {
-				// Log.getInstance().error(e);
-				// }
 
 				// Guardar posicion final
 				long posfin = archivo.length();
@@ -144,26 +150,15 @@ public class FileWorker implements Runnable {
 		}
 	}
 
-	private void saveRecord(FileHeader header, String[] campos)
+	private List<Observacion> parseRecords(FileHeader header, String[] campos)
 			throws Exception {
+		List<Observacion> list = new ArrayList<Observacion>();
+
 		String dateStr = campos[0];
 		Date date = null;
-		// Date date = FormatDates.getTimeFormat().parse(dateStr);
-
-		try {
-			date = formatTime.parse(dateStr);
-			// date = FormatDates.getTimeFormat().parse(dateStr);
-		} catch (Exception e) {
-			Log.getInstance().debug("CAMPOS>>>" + Arrays.toString(campos));
-			Log.getInstance().debug("CAMPO0>>>" + campos[0]);
-			Log.getInstance().debug("DATESTR>>>" + dateStr);
-			e.printStackTrace();
-		}
+		date = formatTime.parse(dateStr);
 
 		Estacion estacion = header.getStation().parseEstacion();
-
-		List<Observacion> buffer = new ArrayList<Observacion>(
-				RECORD_BUFFER_SIZE);
 
 		for (ColumnHeader column : header.getFenomenonColumns()) {
 			// Log.getInstance().debug("COLUMN>>>" + column.getName());
@@ -187,17 +182,22 @@ public class FileWorker implements Runnable {
 			ob.setFenomenoUnidade(fenUni);
 
 			// GeneralDao.insert(ob);
+			list.add(ob);
 
-			if (buffer.size() < RECORD_BUFFER_SIZE) {
-				buffer.add(ob);
-			} else {
-				GeneralDao.bulkInsert(buffer);
-				buffer = new ArrayList<Observacion>(RECORD_BUFFER_SIZE);
-			}
+			// if (buffer.size() < RECORD_BUFFER_SIZE) {
+			// buffer.add(ob);
+			// } else {
+			// Log.getInstance().debug("Insercion en lote: " +
+			// RECORD_BUFFER_SIZE + " registros");
+			// GeneralDao.bulkInsert(buffer);
+			// buffer = new ArrayList<Observacion>(RECORD_BUFFER_SIZE);
+			// }
 		}
-		if (buffer.size() > 0) {
-			GeneralDao.bulkInsert(buffer);
-		}
+		// if (buffer.size() > 0) {
+		// GeneralDao.bulkInsert(buffer);
+		// }
+
+		return list;
 	}
 
 	private void saveHeaderInfo(FileHeader header) throws Exception {

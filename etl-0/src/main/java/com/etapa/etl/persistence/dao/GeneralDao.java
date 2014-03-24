@@ -59,5 +59,6 @@ public class GeneralDao {
 		}
 		
 		JpaManager.commitTransaction();
+		//JpaManager.getEntityManager().clear();
 	}
 }

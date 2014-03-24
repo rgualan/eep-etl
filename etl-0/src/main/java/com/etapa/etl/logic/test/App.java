@@ -5,7 +5,6 @@ import com.etapa.etl.persistence.dao.GeneralDao;
 import com.etapa.etl.persistence.entity.Unidade;
 import com.etapa.etl.persistence.manager.JpaManager;
 import com.etapa.etl.persistence.manager.JpaManagerFactory;
-import com.etapa.etl.util.FormatDates;
 import com.etapa.etl.util.Log;
 
 public class App {
@@ -17,7 +16,7 @@ public class App {
 
 			// Vaciar datos
 			cleanTables();
-			
+
 			// Insertar parametros generales
 			parameterize();
 
@@ -40,7 +39,7 @@ public class App {
 		uni.setUniNombre("NA");
 		uni.setUniDescripcion("NA");
 		uni.setUniTipo("NA");
-		
+
 		GeneralDao.insert(uni);
 	}
 
