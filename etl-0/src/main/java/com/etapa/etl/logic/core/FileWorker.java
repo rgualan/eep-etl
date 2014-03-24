@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -87,9 +88,11 @@ public class FileWorker implements Runnable {
 								+ "no tiene nuevos registros");
 			} else {
 				// Guardar nuevos registros
-
-				String line = "";
 				int i = 0;
+				if (fileEntity.getLastPosition() > 0){
+				archivo.seek(fileEntity.getLastPosition()+2);				
+				 i = 4;}
+				String line = "";
 				List<Observacion> buffer = new ArrayList<Observacion>(
 						RECORD_BUFFER_SIZE);
 
@@ -129,7 +132,8 @@ public class FileWorker implements Runnable {
 						"Numero de registros procesados: " + (i - HEADER_SIZE));
 
 				// Guardar posicion final
-				long posfin = archivo.length();
+			//	long posfin = archivo.length();
+				long posfin = archivo.getFilePointer();
 				fileEntity.setLastPosition(posfin);
 				GeneralDao.update(fileEntity);
 			}
@@ -137,9 +141,11 @@ public class FileWorker implements Runnable {
 		} catch (FileNotFoundException e) {
 			Log.getInstance().error("Archivo no encontrado...", e);
 			throw new RuntimeException(e);
+			
 		} catch (Exception e) {
 			Log.getInstance().error(e);
 			e.printStackTrace();
+			
 			throw new RuntimeException(e);
 		} finally {
 			try {
@@ -299,6 +305,7 @@ public class FileWorker implements Runnable {
 
 		} catch (IOException e) {
 			e.printStackTrace();
+			
 			throw e;
 		} finally {
 			try {

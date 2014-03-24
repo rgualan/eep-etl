@@ -48,11 +48,13 @@ public class LoggerNetScanner {
 
 					String filePath = path + "/" + archivo;
 					Long position = 0l;
-
-					Archivo fileEntity = new Archivo();
+					Archivo fileEntity =GeneralDao.find(Archivo.class, filePath);
+					if (fileEntity==null)
+					{ fileEntity = new Archivo();
 					fileEntity.setPath(filePath);
 					fileEntity.setLastPosition(position);
 					GeneralDao.secureInsert(fileEntity, filePath);
+					}
 
 					exe.execute(new FileWorker(fileEntity, separador));
 				}

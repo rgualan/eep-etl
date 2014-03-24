@@ -92,12 +92,23 @@ public class ColumnHeader {
 			fen.setFenNombre(fenomenoId);
 			fen.setFenTipo(fenSta);
 		}
+		else if (parts.length == 1) {
+			String fenId = parts[0];
+			String fenSta = parts[0];
+
+			String fenomenoId = fenId;
+
+			fen = new Fenomeno();
+			fen.setFenId(fenomenoId);
+			fen.setFenNombre(fenomenoId);
+			fen.setFenTipo(fenSta);
+		}
 		return fen;
 	}
 
 	public Unidade parseUnidad() throws Exception {
 		Unidade uni = null;
-
+		uni = GeneralDao.find(Unidade.class, "NA");
 		String columnName = getName();
 		String[] parts = columnName.split(SEP1);
 
@@ -109,7 +120,7 @@ public class ColumnHeader {
 			uni.setUniNombre(getUnit());
 			uni.setUniDescripcion(getUnit());
 			uni.setUniTipo(getStatistic());
-		} else if (parts.length == 2) {
+		} else if (parts.length == 2 || parts.length == 1 || parts[0].equals("")) {
 			// There is not unit
 			uni = GeneralDao.find(Unidade.class, "NA");
 		}
@@ -122,7 +133,6 @@ public class ColumnHeader {
 
 		Fenomeno fen = parseFenomeno();
 		Unidade uni = parseUnidad();
-
 		if (fen != null && uni != null) {
 			fenUni = new FenomenoUnidade();
 			FenomenoUnidadePK pk = new FenomenoUnidadePK();

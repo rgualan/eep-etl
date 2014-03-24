@@ -1,5 +1,7 @@
 package com.etapa.etl.logic.test;
 
+import java.util.Scanner;
+
 import com.etapa.etl.logic.core.LoggerNetScanner;
 import com.etapa.etl.persistence.dao.GeneralDao;
 import com.etapa.etl.persistence.entity.Unidade;
@@ -15,7 +17,7 @@ public class App {
 			JpaManagerFactory.createEntityManagerFactory();
 
 			// Vaciar datos
-			cleanTables();
+			//cleanTables();
 
 			// Insertar parametros generales
 			parameterize();
@@ -25,6 +27,7 @@ public class App {
 
 		} catch (RuntimeException re) {
 			Log.getInstance().error(re);
+			
 		} catch (Exception e) {
 			Log.getInstance().error(e);
 			JpaManager.rollbackTransaction();
@@ -39,7 +42,7 @@ public class App {
 		uni.setUniNombre("NA");
 		uni.setUniDescripcion("NA");
 		uni.setUniTipo("NA");
-
+if (GeneralDao.find(Unidade.class, uni.getUniId())==null)
 		GeneralDao.insert(uni);
 	}
 
