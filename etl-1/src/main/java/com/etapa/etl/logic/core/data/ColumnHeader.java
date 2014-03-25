@@ -1,5 +1,6 @@
 package com.etapa.etl.logic.core.data;
 
+import com.etapa.etl.logic.core.DictionaryManager;
 import com.etapa.etl.persistence.dao.GeneralDao;
 import com.etapa.etl.persistence.entity.Fenomeno;
 import com.etapa.etl.persistence.entity.FenomenoUnidade;
@@ -56,12 +57,17 @@ public class ColumnHeader {
 		this.statistic = statistic;
 	}
 
-	public Fenomeno parseFenomeno() {
+	public Fenomeno parseFenomeno() throws Exception {
 		Fenomeno fen = null;
 
 		String columnName = getName();
 		String[] parts = columnName.split(SEP1);
-
+		DictionaryManager dm = new DictionaryManager(); //AQUI ESTOY JEJE
+		String auxiliar = dm.getSynonym(parts[0], "3");
+		if (!auxiliar.equals(""))
+			parts[0] = auxiliar;
+		else
+			dm.setDictionary(parts[0], "3");
 		if (parts.length == 4) {
 			String fenId = parts[0];
 			String fenSta = parts[2] + SEP2 + parts[3];
@@ -110,21 +116,32 @@ public class ColumnHeader {
 		Unidade uni = null;
 		uni = GeneralDao.find(Unidade.class, "NA");
 		String columnName = getName();
+		//try{
+		if (!(getUnit().equals("NA") && getStatistic().equals("NA")))
+		{
 		String[] parts = columnName.split(SEP1);
-
+		
 		if (parts.length >= 3) {
 			String uniStr = parts[1];
-
+			DictionaryManager dm = new DictionaryManager(); //AQUI ESTOY JEJE
+			String auxiliar = dm.getSynonym(parts[1], "4");
+			if (!auxiliar.equals(""))
+				parts[1] = auxiliar;
+			else
+				dm.setDictionary(parts[1], "4");
 			uni = new Unidade();
 			uni.setUniId(uniStr);
 			uni.setUniNombre(getUnit());
 			uni.setUniDescripcion(getUnit());
 			uni.setUniTipo(getStatistic());
-		} else if (parts.length == 2 || parts.length == 1 || parts[0].equals("")) {
+		} else if (parts.length == 2 || parts.length == 1 || parts[0].equals("") || parts[0].equals("NA")) {
 			// There is not unit
 			uni = GeneralDao.find(Unidade.class, "NA");
 		}
-
+		}
+		//}
+		//catch(Exception e)
+		//{e.printStackTrace();}
 		return uni;
 	}
 

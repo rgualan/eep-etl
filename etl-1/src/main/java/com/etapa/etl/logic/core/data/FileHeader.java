@@ -33,7 +33,12 @@ public class FileHeader {
 		List<ColumnHeader> fcolumns = new ArrayList<ColumnHeader>();
 		for (ColumnHeader columnHeader : columns) {
 			if (columnHeader.getName().compareToIgnoreCase("TIMESTAMP") == 0
-					|| columnHeader.getName().compareToIgnoreCase("RECORD") == 0) {
+					|| columnHeader.getName().compareToIgnoreCase("RECORD") == 0
+						|| columnHeader.getName().compareToIgnoreCase("TS") == 0
+							|| columnHeader.getName().compareToIgnoreCase("RN") == 0
+							|| columnHeader.getName().compareToIgnoreCase("TMSTAMP") == 0
+							|| columnHeader.getName().compareToIgnoreCase("RECNBR") == 0) {
+				
 				continue;
 			}
 			fcolumns.add(columnHeader);

@@ -14,6 +14,10 @@
 		<class>com.etapa.etl.persistence.entity.ObservacionPK</class>
 		<class>com.etapa.etl.persistence.entity.TipoEstacion</class>
 		<class>com.etapa.etl.persistence.entity.Unidade</class>
+		<class>com.etapa.etl.persistence.entity.Diccionario</class>
+		<class>com.etapa.etl.persistence.entity.DiccionarioPK</class>
+		<class>com.etapa.etl.persistence.entity.Sinonimo</class>
+		<class>com.etapa.etl.persistence.entity.SinonimoPK</class>
 		<!-- <shared-cache-mode>NONE</shared-cache-mode> -->
 		<properties>
 			<!-- Postgres -->

@@ -17,13 +17,13 @@ public class App {
 			JpaManagerFactory.createEntityManagerFactory();
 
 			// Vaciar datos
-			//cleanTables();
+			cleanTables();
 
 			// Insertar parametros generales
 			parameterize();
 
 			// Procesar/Escanear archivos
-			LoggerNetScanner.scan();
+			LoggerNetScanner.scan(); 
 
 		} catch (RuntimeException re) {
 			Log.getInstance().error(re);

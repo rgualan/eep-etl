@@ -20,6 +20,7 @@ import com.etapa.etl.logic.core.data.FileHeader;
 import com.etapa.etl.logic.core.data.StationHeader;
 import com.etapa.etl.persistence.dao.GeneralDao;
 import com.etapa.etl.persistence.entity.Archivo;
+import com.etapa.etl.persistence.entity.Diccionario;
 import com.etapa.etl.persistence.entity.Estacion;
 import com.etapa.etl.persistence.entity.Fenomeno;
 import com.etapa.etl.persistence.entity.FenomenoUnidade;
@@ -247,29 +248,71 @@ public class FileWorker implements Runnable {
 		}
 	}
 
-	private FileHeader getFileHeader(String path) throws IOException {
+	
+	/*private int getFileType(String path) throws IOException
+	{
+		int type=0;
+		BufferedReader br = null;
+		br = new BufferedReader(new FileReader(path));
+		String line = br.readLine().replaceAll("\"", "");			
+			String[] campos = line.split(separador);
+		
+		return type;
+	}*/
+	
+	private FileHeader getFileHeader(String path) throws Exception {
 		FileHeader header = null;
 		BufferedReader br = null;
-
+int typeOfFile =0 ;
 		try {
 			br = new BufferedReader(new FileReader(path));
 			String line;
 			int i = 0;
-
+int ncolumns = 0;
 			header = new FileHeader();
 
 			while ((line = br.readLine()) != null && i < 4) {
+				line = line.replaceAll("\"\"", "NA");
 				line = line.replaceAll("\"", "");
 				String[] campos = line.split(separador);
 
 				// Station
 				if (i == 0) {
-					String toa = campos[0];
-					String name = campos[1];
-					String datalogger = campos[2];
-					String dataloggerCode = campos[3];
-					String type = campos[7];
-
+					System.out.println("el separador es "+separador + " y el num de campos es "+ campos.length);
+					String toa = "";
+					String name = "";
+					String datalogger = "";
+					String dataloggerCode = "";
+					String type = "";
+					if (campos.length==8)
+					{
+					 toa = campos[0];
+					 name = campos[1];
+					 datalogger = campos[2];
+					 dataloggerCode = campos[3];
+					 type = campos[7];
+					}
+					if (campos.length==3)
+					{
+						toa = campos[0];
+						String [] aux = campos[1].split("G");
+						type = aux[0];
+						datalogger = "No especificado";
+						dataloggerCode = "No especificado";
+						name = "G"+aux[1];
+					}
+					DictionaryManager dm = new DictionaryManager(); //AQUI ESTOY JEJE
+					String auxiliar = dm.getSynonym(type, "1");
+					if (!auxiliar.equals(""))
+						type = auxiliar;
+					else
+						dm.setDictionary(type, "1");
+					auxiliar = dm.getSynonym(name, "2");
+					if (!auxiliar.equals(""))
+						name = auxiliar;
+					else
+						dm.setDictionary(name, "2");
+					
 					StationHeader stationHeader = new StationHeader();
 					stationHeader.setToa(toa);
 					stationHeader.setName(name);
@@ -287,19 +330,40 @@ public class FileWorker implements Runnable {
 						ColumnHeader column = new ColumnHeader(campo);
 						column.setIndex(j);
 						columns.add(column);
+						ncolumns =ncolumns+1;
 					}
 
 					header.setColumns(columns);
-				} else if (i == 2) {
+				}
+				if (!campos[0].contains(":")){
+					//System.out.println("ENTRA ACA POR Q TIENE :");
+				 if (i == 2) {
 					for (int j = 0; j < campos.length; j++) {
 						header.getColumns().get(j).setUnit(campos[j]);
+						System.out.println("ENTRA ACA POR Q TIENE :"+campos[j]);
 					}
 				} else if (i == 3) {
 					for (int j = 0; j < campos.length; j++) {
 						header.getColumns().get(j).setStatistic(campos[j]);
 					}
 				}
-
+				}
+				else 
+				{
+					if (i>1)
+					{
+					System.out.println("Entro aca "+header.getStation().getName());
+					//Unidade uni;
+					// uni = GeneralDao.find(Unidade.class, "NA");	
+					for (int j = 0; j < ncolumns; j++) {
+						header.getColumns().get(j).setUnit("NA");
+						header.getColumns().get(j).setStatistic("NA");
+					}
+					
+					i=3;
+					}
+									
+				} 
 				i++;
 			}
 
