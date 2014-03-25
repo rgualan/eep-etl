@@ -42,7 +42,7 @@ public class FileWorker implements Runnable {
 	private Archivo fileEntity;
 	private String separador;
 
-	private static final int HEADER_SIZE = 4;
+	private int HEADER_SIZE = 4;
 	private static final int RECORD_BUFFER_SIZE = 1000;
 
 	// Tool
@@ -278,7 +278,7 @@ int ncolumns = 0;
 
 				// Station
 				if (i == 0) {
-					System.out.println("el separador es "+separador + " y el num de campos es "+ campos.length);
+				//	System.out.println("el separador es "+separador + " y el num de campos es "+ campos.length);
 					String toa = "";
 					String name = "";
 					String datalogger = "";
@@ -340,7 +340,7 @@ int ncolumns = 0;
 				 if (i == 2) {
 					for (int j = 0; j < campos.length; j++) {
 						header.getColumns().get(j).setUnit(campos[j]);
-						System.out.println("ENTRA ACA POR Q TIENE :"+campos[j]);
+					//	System.out.println("ENTRA ACA POR Q TIENE :"+campos[j]);
 					}
 				} else if (i == 3) {
 					for (int j = 0; j < campos.length; j++) {
@@ -352,14 +352,14 @@ int ncolumns = 0;
 				{
 					if (i>1)
 					{
-					System.out.println("Entro aca "+header.getStation().getName());
+				//	System.out.println("Entro aca "+header.getStation().getName());
 					//Unidade uni;
 					// uni = GeneralDao.find(Unidade.class, "NA");	
 					for (int j = 0; j < ncolumns; j++) {
 						header.getColumns().get(j).setUnit("NA");
 						header.getColumns().get(j).setStatistic("NA");
 					}
-					
+					this.HEADER_SIZE=2;
 					i=3;
 					}
 									
