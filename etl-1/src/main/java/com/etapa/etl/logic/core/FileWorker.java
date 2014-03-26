@@ -10,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -20,7 +19,6 @@ import com.etapa.etl.logic.core.data.FileHeader;
 import com.etapa.etl.logic.core.data.StationHeader;
 import com.etapa.etl.persistence.dao.GeneralDao;
 import com.etapa.etl.persistence.entity.Archivo;
-import com.etapa.etl.persistence.entity.Diccionario;
 import com.etapa.etl.persistence.entity.Estacion;
 import com.etapa.etl.persistence.entity.Fenomeno;
 import com.etapa.etl.persistence.entity.FenomenoUnidade;
@@ -90,10 +88,12 @@ public class FileWorker implements Runnable {
 			} else {
 				// Guardar nuevos registros
 				int i = 0;
-				if (fileEntity.getLastPosition() > 0){
-				archivo.seek(fileEntity.getLastPosition()+2);				
-				 i = 4;}
+				if (fileEntity.getLastPosition() > 0) {
+					archivo.seek(fileEntity.getLastPosition() + 2);
+					i = 4;
+				}
 				String line = "";
+
 				List<Observacion> buffer = new ArrayList<Observacion>(
 						RECORD_BUFFER_SIZE);
 
@@ -105,12 +105,9 @@ public class FileWorker implements Runnable {
 					if (i >= HEADER_SIZE) {
 
 						List<Observacion> list = parseRecords(header, campos);
-						buffer.addAll(list);
 
+						buffer.addAll(list);
 						if (buffer.size() >= RECORD_BUFFER_SIZE) {
-//							Log.getInstance().debug(
-//									"Envio de insercion en lote: "
-//											+ buffer.size() + " registros");
 							localExecutor.execute(new BatchInserter(buffer));
 							buffer = new ArrayList<Observacion>(
 									RECORD_BUFFER_SIZE);
@@ -119,7 +116,7 @@ public class FileWorker implements Runnable {
 
 					i++;
 				}
-				
+
 				if (buffer.size() > 0) {
 					localExecutor.execute(new BatchInserter(buffer));
 					buffer = null;
@@ -133,7 +130,7 @@ public class FileWorker implements Runnable {
 						"Numero de registros procesados: " + (i - HEADER_SIZE));
 
 				// Guardar posicion final
-			//	long posfin = archivo.length();
+				// long posfin = archivo.length();
 				long posfin = archivo.getFilePointer();
 				fileEntity.setLastPosition(posfin);
 				GeneralDao.update(fileEntity);
@@ -142,11 +139,11 @@ public class FileWorker implements Runnable {
 		} catch (FileNotFoundException e) {
 			Log.getInstance().error("Archivo no encontrado...", e);
 			throw new RuntimeException(e);
-			
+
 		} catch (Exception e) {
 			Log.getInstance().error(e);
 			e.printStackTrace();
-			
+
 			throw new RuntimeException(e);
 		} finally {
 			try {
@@ -248,27 +245,25 @@ public class FileWorker implements Runnable {
 		}
 	}
 
-	
-	/*private int getFileType(String path) throws IOException
-	{
-		int type=0;
-		BufferedReader br = null;
-		br = new BufferedReader(new FileReader(path));
-		String line = br.readLine().replaceAll("\"", "");			
-			String[] campos = line.split(separador);
-		
-		return type;
-	}*/
-	
+	/*
+	 * private int getFileType(String path) throws IOException { int type=0;
+	 * BufferedReader br = null; br = new BufferedReader(new FileReader(path));
+	 * String line = br.readLine().replaceAll("\"", ""); String[] campos =
+	 * line.split(separador);
+	 * 
+	 * return type; }
+	 */
+
 	private FileHeader getFileHeader(String path) throws Exception {
 		FileHeader header = null;
 		BufferedReader br = null;
-int typeOfFile =0 ;
+		//int typeOfFile = 0;
+		
 		try {
 			br = new BufferedReader(new FileReader(path));
 			String line;
 			int i = 0;
-int ncolumns = 0;
+			int ncolumns = 0;
 			header = new FileHeader();
 
 			while ((line = br.readLine()) != null && i < 4) {
@@ -278,30 +273,31 @@ int ncolumns = 0;
 
 				// Station
 				if (i == 0) {
-				//	System.out.println("el separador es "+separador + " y el num de campos es "+ campos.length);
+					// System.out.println("el separador es "+separador +
+					// " y el num de campos es "+ campos.length);
 					String toa = "";
 					String name = "";
 					String datalogger = "";
 					String dataloggerCode = "";
 					String type = "";
-					if (campos.length==8)
-					{
-					 toa = campos[0];
-					 name = campos[1];
-					 datalogger = campos[2];
-					 dataloggerCode = campos[3];
-					 type = campos[7];
-					}
-					if (campos.length==3)
-					{
+					if (campos.length == 8) {
 						toa = campos[0];
-						String [] aux = campos[1].split("G");
+						name = campos[1];
+						datalogger = campos[2];
+						dataloggerCode = campos[3];
+						type = campos[7];
+					}
+					if (campos.length == 3) {
+						toa = campos[0];
+						String[] aux = campos[1].split("G");
 						type = aux[0];
 						datalogger = "No especificado";
 						dataloggerCode = "No especificado";
-						name = "G"+aux[1];
+						name = "G" + aux[1];
 					}
-					DictionaryManager dm = new DictionaryManager(); //AQUI ESTOY JEJE
+					DictionaryManager dm = new DictionaryManager(); // AQUI
+																	// ESTOY
+																	// JEJE
 					String auxiliar = dm.getSynonym(type, "1");
 					if (!auxiliar.equals(""))
 						type = auxiliar;
@@ -312,7 +308,7 @@ int ncolumns = 0;
 						name = auxiliar;
 					else
 						dm.setDictionary(name, "2");
-					
+
 					StationHeader stationHeader = new StationHeader();
 					stationHeader.setToa(toa);
 					stationHeader.setName(name);
@@ -330,46 +326,43 @@ int ncolumns = 0;
 						ColumnHeader column = new ColumnHeader(campo);
 						column.setIndex(j);
 						columns.add(column);
-						ncolumns =ncolumns+1;
+						ncolumns = ncolumns + 1;
 					}
 
 					header.setColumns(columns);
 				}
-				if (!campos[0].contains(":")){
-					//System.out.println("ENTRA ACA POR Q TIENE :");
-				 if (i == 2) {
-					for (int j = 0; j < campos.length; j++) {
-						header.getColumns().get(j).setUnit(campos[j]);
-					//	System.out.println("ENTRA ACA POR Q TIENE :"+campos[j]);
+				if (!campos[0].contains(":")) {
+					// System.out.println("ENTRA ACA POR Q TIENE :");
+					if (i == 2) {
+						for (int j = 0; j < campos.length; j++) {
+							header.getColumns().get(j).setUnit(campos[j]);
+							// System.out.println("ENTRA ACA POR Q TIENE :"+campos[j]);
+						}
+					} else if (i == 3) {
+						for (int j = 0; j < campos.length; j++) {
+							header.getColumns().get(j).setStatistic(campos[j]);
+						}
 					}
-				} else if (i == 3) {
-					for (int j = 0; j < campos.length; j++) {
-						header.getColumns().get(j).setStatistic(campos[j]);
+				} else {
+					if (i > 1) {
+						// System.out.println("Entro aca "+header.getStation().getName());
+						// Unidade uni;
+						// uni = GeneralDao.find(Unidade.class, "NA");
+						for (int j = 0; j < ncolumns; j++) {
+							header.getColumns().get(j).setUnit("NA");
+							header.getColumns().get(j).setStatistic("NA");
+						}
+						this.HEADER_SIZE = 2;
+						i = 3;
 					}
+
 				}
-				}
-				else 
-				{
-					if (i>1)
-					{
-				//	System.out.println("Entro aca "+header.getStation().getName());
-					//Unidade uni;
-					// uni = GeneralDao.find(Unidade.class, "NA");	
-					for (int j = 0; j < ncolumns; j++) {
-						header.getColumns().get(j).setUnit("NA");
-						header.getColumns().get(j).setStatistic("NA");
-					}
-					this.HEADER_SIZE=2;
-					i=3;
-					}
-									
-				} 
 				i++;
 			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
-			
+
 			throw e;
 		} finally {
 			try {
