@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.etapa</groupId>
-	<artifactId>etl</artifactId>
+	<artifactId>etl-1</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0</version>
 	<name>ETAPA ETL - ESTACIONES A TIEMPO REAL</name>
