@@ -189,7 +189,7 @@ public class FileWorker implements Runnable {
 
 			ob.setEstacion(estacion);
 			ob.setFenomenoUnidade(fenUni);
-
+//s
 			// GeneralDao.insert(ob);
 			list.add(ob);
 

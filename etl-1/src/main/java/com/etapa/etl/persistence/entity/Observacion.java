@@ -49,7 +49,7 @@ public class Observacion implements Serializable {
 	public String getObsValor() {
 		return this.obsValor;
 	}
-
+//ss
 	public void setObsValor(String obsValor) {
 		this.obsValor = obsValor;
 	}
