@@ -5,7 +5,7 @@
 	<artifactId>etl</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0</version>
-	<name>ETAPA ETL - ESTACIONES A TIEMPO REAL</name>
+	<name>ETAPA ETL - ESTACIONES A TIEMPO REAL EN JAVA</name>
 	<url>http://www.etapa.net.ec/</url>
 	<properties>
 		<jdk.version>1.6</jdk.version>
